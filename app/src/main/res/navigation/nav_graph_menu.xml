@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_menu"
+    app:startDestination="@id/nav_perfil">
+
+    <!-- Perfil -->
+    <fragment
+        android:id="@+id/nav_perfil"
+        android:name="com.example.inmobiliaria.ui.perfil.PerfilFragment"
+        android:label="@string/menu_profile"
+        tools:layout="@layout/fragment_perfil">
+
+        <!-- Acción Perfil -> Cambiar Clave -->
+        <action
+            android:id="@+id/action_nav_perfil_to_cambiarClaveFragment"
+            app:destination="@id/cambiarClaveFragment" />
+    </fragment>
+
+    <!-- Inmuebles -->
+    <fragment
+        android:id="@+id/nav_inmuebles"
+        android:name="com.example.inmobiliaria.ui.inmuebles.InmuebleFragment"
+        android:label="@string/menu_inmuebles"
+        tools:layout="@layout/fragment_inmueble" />
+
+    <!-- Cambiar Clave (destino) -->
+    <fragment
+        android:id="@+id/cambiarClaveFragment"
+        android:name="com.example.inmobiliaria.ui.perfil.CambiarClaveFragment"
+        android:label="@string/menu_cambiar_clave"
+        tools:layout="@layout/fragment_cambiar_clave" />
+</navigation>

@@ -1,5 +1,8 @@
 <resources>
+    <!-- Nombre de la app -->
     <string name="app_name">Inmobiliaria</string>
+
+    <!-- Drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -7,7 +10,56 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Menú principal -->
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_login">Login</string>
+    <string name="menu_menu">Menú principal</string>
+    <string name="menu_title">Menú principal</string>
+
+    <!-- Opciones del Drawer -->
+    <string name="menu_profile">Perfil</string>
+    <string name="menu_inmuebles">Inmuebles</string>
+    <string name="menu_contratos">Contratos</string>
+    <string name="menu_logout">Cerrar sesión</string>
+    <string name="menu_cambiar_clave">Cambiar clave</string>
+
+    <!-- Perfil -->
+    <string name="perfil_titulo">Perfil del propietario</string>
+    <string name="btn_guardar">Guardar</string>
+    <string name="btn_editar">Editar</string>
+    <string name="btn_cambiar_clave">Cambiar clave</string>
+
+    <!-- Cambiar clave -->
+    <string name="clave_actual">Clave actual</string>
+    <string name="clave_nueva">Nueva clave</string>
+    <string name="confirmar_clave">Confirmar clave</string>
+    <string name="cambiar_clave">Cambiar clave</string>
+
+    <!-- Inmuebles -->
+    <string name="titulo_inmuebles">Listado de Inmuebles</string>
+    <string name="btn_habilitar">Habilitar</string>
+    <string name="btn_deshabilitar">Deshabilitar</string>
+    <string name="sin_inmuebles">No hay inmuebles cargados</string>
+
+    <!-- Mensajes comunes -->
+    <string name="mensaje_error">Ocurrió un error</string>
+    <string name="mensaje_exito">Operación exitosa</string>
+    <string name="mensaje_cargando">Cargando...</string>
+
+    <!-- Login -->
+    <string name="login_usuario">Correo electrónico</string>
+    <string name="login_clave">Contraseña</string>
+    <string name="btn_ingresar">Ingresar</string>
+    <string name="btn_salir">Salir</string>
+
+    <!-- Contratos -->
+    <string name="titulo_contratos">Contratos activos</string>
+    <string name="sin_contratos">No hay contratos registrados</string>
+
+    <!-- Pagos -->
+    <string name="titulo_pagos">Pagos</string>
+    <string name="sin_pagos">No hay pagos disponibles</string>
 </resources>
+

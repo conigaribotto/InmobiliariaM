@@ -3,67 +3,107 @@ package com.example.inmobiliaria.request;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.lab3tp1.model.Propietario;
+import com.example.inmobiliaria.model.Propietario;
+import com.example.inmobiliaria.model.Inmueble;
+import com.example.inmobiliaria.model.Alquiler;
+import com.example.inmobiliaria.model.Pagos;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.logging.HttpLoggingInterceptor;
+import java.util.List;
+
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
-import retrofit2.http.*;
+import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Part;
+import retrofit2.http.Path;
 
 public class ApiClient {
+    private static final String URLBASE = "https://inmobiliariaulp-amb5hwfqaraweyga.canadacentral-01.azurewebsites.net/";
 
-    private static final String URLBASE = "https://inmobiliariaulp-amb5hwfqaraweyga.canadacentral01.azurewebsites.net/api/";
-    private static final String PREFS_NAME = "Lab3TP1Prefs";
-    private static final String TOKEN_KEY = "token";
-
-    public static InmobiliariaService getApiInmobiliaria(Context context) {
+    public static InmobiliariaService getInmobiliariaService(){
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
                 .create();
 
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(chain -> {
-                    Request.Builder builder = chain.request().newBuilder();
-                    String token = getToken(context);
-                    if (token != null)
-                        builder.addHeader("Authorization", "Bearer " + token);
-                    return chain.proceed(builder.build());
-                })
-                .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-                .build();
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(URLBASE)
-                .client(client)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
-
         return retrofit.create(InmobiliariaService.class);
     }
 
-    public static void saveToken(Context context, String token) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        prefs.edit().putString(TOKEN_KEY, token).apply();
-    }
-
-    public static String getToken(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        return prefs.getString(TOKEN_KEY, null);
-    }
-
-    public interface InmobiliariaService {
+    public interface InmobiliariaService{
+        // Auth (ya lo tenías)
         @FormUrlEncoded
-        @POST("Propietarios/login")
+        @POST("api/propietarios/login")
         Call<String> login(@Field("Usuario") String usuario, @Field("Clave") String clave);
 
-        @GET("Propietarios")
-        Call<Propietario> getPerfil(@Header("Authorization") String token);
+        @FormUrlEncoded
+        @PUT("api/propietarios/changePassword")
+        Call<Void> cambiarClave(@Header("Authorization") String token,
+                                @Field("currentPassword") String claveActual,
+                                @Field("newPassword") String claveNueva);
+
+        // Propietario (perfil)
+        @GET("api/propietarios")
+        Call<Propietario> obtenerPropietario(@Header("Authorization") String token);
+
+        @PUT("api/propietarios/actualizar")
+        Call<Propietario> actualizarPropietario(@Header("Authorization") String token, @Body Propietario propietario);
+
+        // Inmuebles
+        @GET("api/inmuebles/propietario")
+        Call<List<Inmueble>> obtenerInmueblesPorPropietario(@Header("Authorization") String token);
+
+        @PUT("api/inmuebles/{id}/habilitar")
+        Call<Void> habilitarInmueble(@Header("Authorization") String token, @Path("id") int id);
+
+        @PUT("api/inmuebles/{id}/deshabilitar")
+        Call<Void> deshabilitarInmueble(@Header("Authorization") String token, @Path("id") int id);
+
+        @Multipart
+        @POST("api/inmuebles")
+        Call<Inmueble> crearInmueble(@Header("Authorization") String token,
+                                     @Part("titulo") RequestBody titulo,
+                                     @Part("descripcion") RequestBody descripcion,
+                                     @Part("direccion") RequestBody direccion,
+                                     @Part("propietarioId") RequestBody propietarioId,
+                                     @Part MultipartBody.Part foto);
+
+        // Contratos y pagos
+        @GET("api/contratos/inmueble/{inmuebleId}")
+        Call<List<Alquiler>> obtenerContratosPorInmueble(@Header("Authorization") String token, @Path("inmuebleId") int inmuebleId);
+
+        @GET("api/pagos/contrato/{contratoId}")
+        Call<List<Pagos>> obtenerPagosPorContrato(@Header("Authorization") String token, @Path("contratoId") int contratoId);
+    }
+
+    // SharedPreferences helpers
+    private static final String PREFS_NAME = "inmobiliaria_prefs";
+    private static final String PREF_TOKEN = "token";
+
+    public static void guardarToken(Context context, String token){
+        SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(PREF_TOKEN, token);
+        editor.apply();
+    }
+
+    public static String obtenerToken(Context context){
+        SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        return preferences.getString(PREF_TOKEN, null);
     }
 }

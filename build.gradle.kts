@@ -1,4 +1,3 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-plugins {
-    alias(libs.plugins.android.application) apply false
-}
+// build.gradle.kts (raíz) — mínimo
+// Este archivo puede quedarse vacío o usarse para buildscript/common config.
+// No debe contener settings/ include/ dependencyResolutionManagement.
