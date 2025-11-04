@@ -23,7 +23,6 @@ public class Propietario implements Serializable {
         this.clave = clave;
     }
 
-    // getters y setters
     public int getIdPropietario() { return idPropietario; }
     public void setIdPropietario(int idPropietario) { this.idPropietario = idPropietario; }
 

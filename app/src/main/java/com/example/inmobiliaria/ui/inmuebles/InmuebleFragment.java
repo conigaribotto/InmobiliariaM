@@ -44,7 +44,6 @@ public class InmuebleFragment extends Fragment implements InmuebleAdapter.OnTogg
         );
 
         viewModel.getLoading().observe(getViewLifecycleOwner(), loading -> {
-            // opcional: mostrar progressBar, pero sin condicionales de negocio
         });
 
         viewModel.cargarInmuebles();

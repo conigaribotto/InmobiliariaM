@@ -56,7 +56,6 @@ public class MenuActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        // Manejo manual de Login/Logout + delegar el resto al NavController
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
 

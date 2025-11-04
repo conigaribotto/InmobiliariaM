@@ -46,7 +46,6 @@ public class PerfilViewModel extends AndroidViewModel {
         return btnTexto;
     }
 
-    // lee el perfil desde la API y publica en mPropietario
     public void leerPropietario() {
         String token = ApiClient.obtenerToken(getApplication());
         if (token == null) {
@@ -88,8 +87,6 @@ public class PerfilViewModel extends AndroidViewModel {
                 return;
             }
 
-            // Si necesitás que dni y telefono sean enteros para lógica interna, podés parsearlos aquí,
-            // pero el modelo Propietario actual espera Strings (según tu clase), así que los dejamos como Strings.
             Propietario current = mPropietario.getValue();
             if (current == null) {
                 Toast.makeText(getApplication(), "Perfil no cargado", Toast.LENGTH_SHORT).show();

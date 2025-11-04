@@ -46,7 +46,6 @@ public class ApiClient {
     }
 
     public interface InmobiliariaService{
-        // Auth (ya lo tenías)
         @FormUrlEncoded
         @POST("api/propietarios/login")
         Call<String> login(@Field("Usuario") String usuario, @Field("Clave") String clave);
@@ -57,14 +56,12 @@ public class ApiClient {
                                 @Field("currentPassword") String claveActual,
                                 @Field("newPassword") String claveNueva);
 
-        // Propietario (perfil)
         @GET("api/propietarios")
         Call<Propietario> obtenerPropietario(@Header("Authorization") String token);
 
         @PUT("api/propietarios/actualizar")
         Call<Propietario> actualizarPropietario(@Header("Authorization") String token, @Body Propietario propietario);
 
-        // Inmuebles
         @GET("api/inmuebles/propietario")
         Call<List<Inmueble>> obtenerInmueblesPorPropietario(@Header("Authorization") String token);
 
@@ -83,7 +80,6 @@ public class ApiClient {
                                      @Part("propietarioId") RequestBody propietarioId,
                                      @Part MultipartBody.Part foto);
 
-        // Contratos y pagos
         @GET("api/contratos/inmueble/{inmuebleId}")
         Call<List<Alquiler>> obtenerContratosPorInmueble(@Header("Authorization") String token, @Path("inmuebleId") int inmuebleId);
 
