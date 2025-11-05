@@ -9,5 +9,10 @@ public class Pagos {
     private LocalDateTime fecha;
     private double importe;
 
+    public int getIdPago() { return idPago; }
+    public int getNumero() { return nroPago; }
+    public int getIdAlquiler() { return idAlquiler; }
+    public LocalDateTime getFecha() { return fecha; }
+    public double getImporte() { return importe; }
 
 }

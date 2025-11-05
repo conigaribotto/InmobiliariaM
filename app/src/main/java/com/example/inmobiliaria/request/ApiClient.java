@@ -3,10 +3,10 @@ package com.example.inmobiliaria.request;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.inmobiliaria.model.Propietario;
-import com.example.inmobiliaria.model.Inmueble;
 import com.example.inmobiliaria.model.Alquiler;
+import com.example.inmobiliaria.model.Inmueble;
 import com.example.inmobiliaria.model.Pagos;
+import com.example.inmobiliaria.model.Propietario;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -46,22 +46,31 @@ public class ApiClient {
     }
 
     public interface InmobiliariaService{
+        // Auth
         @FormUrlEncoded
         @POST("api/propietarios/login")
         Call<String> login(@Field("Usuario") String usuario, @Field("Clave") String clave);
 
+        // Cambiar clave (logueado)
         @FormUrlEncoded
         @PUT("api/propietarios/changePassword")
         Call<Void> cambiarClave(@Header("Authorization") String token,
                                 @Field("currentPassword") String claveActual,
                                 @Field("newPassword") String claveNueva);
 
+        // Reset clave (me olvidé) - AJUSTAR si tu API usa otra ruta/campo
+        @FormUrlEncoded
+        @POST("api/propietarios/resetPassword")
+        Call<Void> resetPassword(@Field("email") String email);
+
+        // Perfil
         @GET("api/propietarios")
         Call<Propietario> obtenerPropietario(@Header("Authorization") String token);
 
         @PUT("api/propietarios/actualizar")
         Call<Propietario> actualizarPropietario(@Header("Authorization") String token, @Body Propietario propietario);
 
+        // Inmuebles
         @GET("api/inmuebles/propietario")
         Call<List<Inmueble>> obtenerInmueblesPorPropietario(@Header("Authorization") String token);
 
@@ -77,9 +86,19 @@ public class ApiClient {
                                      @Part("titulo") RequestBody titulo,
                                      @Part("descripcion") RequestBody descripcion,
                                      @Part("direccion") RequestBody direccion,
-                                     @Part("propietarioId") RequestBody propietarioId,
                                      @Part MultipartBody.Part foto);
 
+        @Multipart
+        @POST("api/inmuebles")
+        Call<Inmueble> crearInmuebleSinPropietario(
+                @Header("Authorization") String token,
+                @Part("titulo") RequestBody titulo,
+                @Part("descripcion") RequestBody descripcion,
+                @Part("direccion") RequestBody direccion,
+                @Part MultipartBody.Part foto
+        );
+
+        // Contratos & Pagos
         @GET("api/contratos/inmueble/{inmuebleId}")
         Call<List<Alquiler>> obtenerContratosPorInmueble(@Header("Authorization") String token, @Path("inmuebleId") int inmuebleId);
 
@@ -87,19 +106,35 @@ public class ApiClient {
         Call<List<Pagos>> obtenerPagosPorContrato(@Header("Authorization") String token, @Path("contratoId") int contratoId);
     }
 
-    // SharedPreferences helpers
+    // SharedPreferences
     private static final String PREFS_NAME = "inmobiliaria_prefs";
     private static final String PREF_TOKEN = "token";
+    private static final String PREF_USER = "user_email";
 
     public static void guardarToken(Context context, String token){
         SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(PREF_TOKEN, token);
-        editor.apply();
+        preferences.edit().putString(PREF_TOKEN, token).apply();
     }
-
     public static String obtenerToken(Context context){
         SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return preferences.getString(PREF_TOKEN, null);
     }
+    public static boolean estaAutenticado(Context context){
+        return obtenerToken(context) != null;
+    }
+    public static void logout(Context context){
+        SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        preferences.edit().remove(PREF_TOKEN).apply();
+    }
+
+    public static void guardarUsuarioRecordado(Context context, String email){
+        SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        preferences.edit().putString(PREF_USER, email).apply();
+    }
+    public static String obtenerUsuarioRecordado(Context context){
+        SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        return preferences.getString(PREF_USER, "");
+    }
 }
+
+

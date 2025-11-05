@@ -11,4 +11,13 @@ public class Alquiler implements Serializable {
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
 
-    }
+
+    public int getIdAlquiler() { return idAlquiler; }
+    public int getIdInmueble() { return idInmueble; }
+    public int getIdInquilino() { return idInquilino; }
+    public double getPrecio() { return precio; }
+    public LocalDateTime getFechaInicio() { return fechaInicio; }
+    public LocalDateTime getFechaFin() { return fechaFin; }
+
+
+}

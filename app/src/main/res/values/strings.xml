@@ -55,11 +55,50 @@
     <string name="btn_salir">Salir</string>
 
     <!-- Contratos -->
-    <string name="titulo_contratos">Contratos activos</string>
-    <string name="sin_contratos">No hay contratos registrados</string>
+    <string name="menu_pagos">Pagos</string>
+    <string name="contratos_titulo">Contratos</string>
+    <string name="contrato_numero">Contrato #</string>
+    <string name="contrato_precio">Precio: %1$s</string>
+    <string name="contrato_periodo">Desde %1$s hasta %2$s</string>
+    <string name="contrato_ver_pagos">Ver pagos</string>
+    <string name="contratos_vacio">No hay contratos para este inmueble</string>
+    <string name="cargando">Cargando…</string>
 
     <!-- Pagos -->
-    <string name="titulo_pagos">Pagos</string>
-    <string name="sin_pagos">No hay pagos disponibles</string>
+    <string name="pagos_titulo">Pagos</string>
+    <string name="pago_numero">Pago # %1$d</string>
+    <string name="pago_importe">Importe: %1$s</string>
+    <string name="pago_fecha">Fecha: %1$s</string>
+    <string name="pagos_vacio">No hay pagos para este contrato</string>
+
+
+    <!-- Inmuebles -->
+    <string name="inmueble_agregar">Agregar inmueble</string>
+    <string name="inmueble_foto_desc">Foto del inmueble</string>
+    <string name="inmueble_titulo_placeholder">Título del inmueble</string>
+    <string name="inmueble_direccion_placeholder">Dirección</string>
+    <string name="inmueble_estado_placeholder">Estado</string>
+    <string name="inmueble_toggle">Cambiar</string>
+
+    <string name="inmueble_titulo_hint">Título</string>
+    <string name="inmueble_descripcion_hint">Descripción</string>
+    <string name="inmueble_direccion_hint">Dirección</string>
+    <string name="inmueble_elegir_foto">Elegir foto</string>
+    <string name="inmueble_titulo">Título</string>
+    <string name="inmueble_desc">Descripción</string>
+    <string name="inmueble_dir">Dirección</string>
+    <string name="inmueble_btn_foto">Foto</string>
+    <string name="inmueble_btn_crear">Crear</string>
+    <string name="inmueble_habilitado">Habilitado</string>
+    <!-- Logout -->
+    <string name="forgot_title">Recuperar contraseña</string>
+    <string name="forgot_hint_email">Email</string>
+    <string name="forgot_send">Enviar enlace</string>
+    <string name="forgot_info">Ingresá tu email y te enviaremos un enlace para restablecer la contraseña.</string>
+    <string name="forgot_ok">Si el email existe, se envió el enlace.</string>
+    <string name="forgot_error">No se pudo procesar el pedido</string>
+    <string name="logout_ok">Sesión cerrada</string>
+
+
 </resources>
 

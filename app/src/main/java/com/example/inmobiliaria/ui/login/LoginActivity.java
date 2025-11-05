@@ -1,13 +1,16 @@
 package com.example.inmobiliaria.ui.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.inmobiliaria.ui.login.LoginActivityViewModel;
 import com.example.inmobiliaria.databinding.ActivityLoginBinding;
+import com.example.inmobiliaria.ui.menu.MenuActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -18,19 +21,41 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
-        viewModel = new ViewModelProvider(this).get(LoginActivityViewModel.class);
         setContentView(binding.getRoot());
 
-        // Observa el resultado del login (el ViewModel maneja la navegación)
-        viewModel.getmLogin().observe(this, loginOk -> {
-            // La Activity no hace lógica, solo reacciona al evento
+        viewModel = new ViewModelProvider(this).get(LoginActivityViewModel.class);
+
+        // Observa mensajes
+        viewModel.getMensaje().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String msg) {
+                Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+            }
         });
 
-        // Botón de login
-        binding.btnLogin.setOnClickListener(v -> {
-            String usuario = binding.etUsuario.getText().toString();
-            String clave = binding.etClave.getText().toString();
-            viewModel.login(usuario, clave);
+        // Observa éxito de login
+        viewModel.getLoginExitoso().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean ok) {
+                if (ok) {
+                    Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
         });
+
+        // Listener del botón
+        binding.btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String usuario = binding.etUsuario.getText().toString();
+                String clave = binding.etClave.getText().toString();
+                viewModel.login(usuario, clave);
+            }
+        });
+
+        // Si ya tiene token, ir directo al menú
+        viewModel.verificarSesion();
     }
 }
