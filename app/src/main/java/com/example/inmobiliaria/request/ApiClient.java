@@ -135,6 +135,13 @@ public class ApiClient {
         SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return preferences.getString(PREF_USER, "");
     }
+
+    // ApiClient.java  (agregar al final, junto a guardarToken/obtenerToken)
+    public static void borrarToken(Context context){
+        SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        preferences.edit().remove(PREF_TOKEN).apply();
+    }
+
 }
 
 

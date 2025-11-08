@@ -29,9 +29,9 @@
     <!-- NUEVO: Contratos (Alquiler) -->
     <fragment
         android:id="@+id/nav_contratos"
-        android:name="com.example.inmobiliaria.ui.contratos.ContratosFragment"
+        android:name="com.example.inmobiliaria.ui.contratos.ContratoFragment"
         android:label="@string/menu_contratos"
-        tools:layout="@layout/fragment_contratos">
+        tools:layout="@layout/fragment_contrato">
         <argument
             android:name="inmuebleId"
             app:argType="integer" />
@@ -44,13 +44,18 @@
     <!-- NUEVO: Pagos -->
     <fragment
         android:id="@+id/nav_pagos"
-        android:name="com.example.inmobiliaria.ui.pagos.PagosFragment"
+        android:name="com.example.inmobiliaria.ui.pagos.PagoFragment"
         android:label="@string/menu_pagos"
-        tools:layout="@layout/fragment_pagos">
+        tools:layout="@layout/fragment_pago">
         <argument
             android:name="contratoId"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/nav_logout"
+        android:name="com.example.inmobiliaria.ui.logout.LogoutFragment"
+        android:label="@string/menu_logout"
+        tools:layout="@layout/fragment_logout" />
 
     <fragment
         android:id="@+id/cambiarClaveFragment"

@@ -98,6 +98,9 @@
     <string name="forgot_ok">Si el email existe, se envió el enlace.</string>
     <string name="forgot_error">No se pudo procesar el pedido</string>
     <string name="logout_ok">Sesión cerrada</string>
+    <string name="logout_pregunta">¿Querés cerrar sesión?</string>
+    <string name="logout_confirmar">Cerrar sesión</string>
+    <string name="logout_cancelar">Cancelar</string>
 
 
 </resources>
