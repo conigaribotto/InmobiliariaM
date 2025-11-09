@@ -4,13 +4,10 @@
     android:background="?android:attr/selectableItemBackground"
     android:layout_width="match_parent" android:layout_height="wrap_content">
 
-    <TextView android:id="@+id/tvInquilino"
+    <TextView android:id="@+id/tvNombre"
         android:textStyle="bold" android:textSize="16sp"
         android:layout_width="match_parent" android:layout_height="wrap_content"/>
 
     <TextView android:id="@+id/tvInmueble"
-        android:layout_width="match_parent" android:layout_height="wrap_content"/>
-
-    <TextView android:id="@+id/tvPeriodo"
         android:layout_width="match_parent" android:layout_height="wrap_content"/>
 </LinearLayout>

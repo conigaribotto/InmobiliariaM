@@ -1,4 +1,4 @@
-package com.example.inmobiliaria.ui.contratos;
+package com.example.inmobiliaria.ui.inquilinos;
 
 import android.app.Application;
 
@@ -17,12 +17,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ContratoViewModel extends AndroidViewModel {
-
+public class InquilinosViewModel extends AndroidViewModel {
     private final MutableLiveData<List<Alquiler>> contratos = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
 
-    public ContratoViewModel(@NonNull Application app) { super(app); }
+    public InquilinosViewModel(@NonNull Application app) { super(app); }
 
     public LiveData<List<Alquiler>> getContratos() { return contratos; }
     public LiveData<Boolean> getLoading() { return loading; }
@@ -42,4 +41,5 @@ public class ContratoViewModel extends AndroidViewModel {
                 });
     }
 }
+
 

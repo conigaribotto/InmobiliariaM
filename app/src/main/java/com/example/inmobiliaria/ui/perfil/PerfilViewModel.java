@@ -19,53 +19,39 @@ import retrofit2.Response;
 
 public class PerfilViewModel extends AndroidViewModel {
 
-    // Campos que el Fragment observa directamente (sin ifs)
-    private final MutableLiveData<String> nombre = new MutableLiveData<>("");
+    private final MutableLiveData<String> nombre   = new MutableLiveData<>("");
     private final MutableLiveData<String> apellido = new MutableLiveData<>("");
-    private final MutableLiveData<String> dni = new MutableLiveData<>("");
-    private final MutableLiveData<String> email = new MutableLiveData<>("");
+    private final MutableLiveData<String> dni      = new MutableLiveData<>("");
+    private final MutableLiveData<String> email    = new MutableLiveData<>("");
     private final MutableLiveData<String> telefono = new MutableLiveData<>("");
 
-    private final MutableLiveData<Boolean> editable = new MutableLiveData<>(false);
-    private final MutableLiveData<String> botonTexto = new MutableLiveData<>("Editar");
+    private final MutableLiveData<Boolean> editable    = new MutableLiveData<>(false);
+    private final MutableLiveData<String>  botonTexto  = new MutableLiveData<>("Editar");
 
-    // Fuente de verdad del perfil
     private Propietario propietarioCache;
 
-    public PerfilViewModel(@NonNull Application app) {
-        super(app);
-    }
+    public PerfilViewModel(@NonNull Application app) { super(app); }
 
-    // Exposición de LiveData
-    public LiveData<String> getNombre() { return nombre; }
+    public LiveData<String> getNombre()   { return nombre; }
     public LiveData<String> getApellido() { return apellido; }
-    public LiveData<String> getDni() { return dni; }
-    public LiveData<String> getEmail() { return email; }
+    public LiveData<String> getDni()      { return dni; }
+    public LiveData<String> getEmail()    { return email; }
     public LiveData<String> getTelefono() { return telefono; }
-    public LiveData<Boolean> getEditable() { return editable; }
-    public LiveData<String> getBotonTexto() { return botonTexto; }
+    public LiveData<Boolean> getEditable(){ return editable; }
+    public LiveData<String> getBotonTexto(){ return botonTexto; }
 
-    // Carga inicial
     public void cargarPropietario() {
-        String token = ApiClient.obtenerToken(getApplication());
-        if (token == null) {
-            Toast.makeText(getApplication(), "No autenticado", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         ApiClient.getInmobiliariaService()
-                .obtenerPropietario("Bearer " + token)
+                .obtenerPropietario()
                 .enqueue(new Callback<Propietario>() {
-                    @Override
-                    public void onResponse(Call<Propietario> call, Response<Propietario> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            propietarioCache = response.body();
-
+                    @Override public void onResponse(Call<Propietario> call, Response<Propietario> resp) {
+                        if (resp.isSuccessful() && resp.body() != null) {
+                            propietarioCache = resp.body();
                             nombre.postValue(safe(propietarioCache.getNombre()));
                             apellido.postValue(safe(propietarioCache.getApellido()));
-                            dni.postValue(String.valueOf(safeNum(propietarioCache.getDni())));
+                            dni.postValue(safe(propietarioCache.getDni()));
                             email.postValue(safe(propietarioCache.getEmail()));
-                            telefono.postValue(String.valueOf(safeNum(propietarioCache.getTelefono())));
+                            telefono.postValue(safe(propietarioCache.getTelefono()));
 
                             editable.postValue(false);
                             botonTexto.postValue("Editar");
@@ -73,19 +59,13 @@ public class PerfilViewModel extends AndroidViewModel {
                             Toast.makeText(getApplication(), "No se pudo cargar el perfil", Toast.LENGTH_SHORT).show();
                         }
                     }
-
-                    @Override
-                    public void onFailure(Call<Propietario> call, Throwable t) {
+                    @Override public void onFailure(Call<Propietario> call, Throwable t) {
                         Toast.makeText(getApplication(), "Error de conexión", Toast.LENGTH_SHORT).show();
-                        Log.d("PerfilViewModel", "leerPropietario failure: " + t.getMessage());
+                        Log.e("PerfilVM", "leerPropietario: " + t.getMessage());
                     }
                 });
     }
 
-    /**
-     * Lógica del botón principal (Editar/Guardar).
-     * El Fragment pasa el texto actual del botón y los valores de entrada, sin ifs.
-     */
     public void onClickBotonPrincipal(String textoBotonActual,
                                       String nombreIn,
                                       String apellidoIn,
@@ -93,42 +73,35 @@ public class PerfilViewModel extends AndroidViewModel {
                                       String telefonoIn,
                                       String emailIn) {
 
-        // Cambiar a modo edición
         if ("Editar".equalsIgnoreCase(textoBotonActual)) {
             editable.setValue(true);
             botonTexto.setValue("Guardar");
             return;
         }
 
-        // Guardar cambios
         if (!validar(nombreIn, apellidoIn, dniIn, telefonoIn, emailIn)) return;
         if (propietarioCache == null) {
             Toast.makeText(getApplication(), "Perfil no cargado", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Actualizo cache
         propietarioCache.setNombre(nombreIn);
         propietarioCache.setApellido(apellidoIn);
-        propietarioCache.setDni(dniIn);         // en tu modelo es String
-        propietarioCache.setTelefono(telefonoIn); // idem
+        propietarioCache.setDni(dniIn);
+        propietarioCache.setTelefono(telefonoIn);
         propietarioCache.setEmail(emailIn);
 
-        String token = ApiClient.obtenerToken(getApplication());
         ApiClient.getInmobiliariaService()
-                .actualizarPropietario("Bearer " + token, propietarioCache)
+                .actualizarPropietario(propietarioCache)
                 .enqueue(new Callback<Propietario>() {
-                    @Override
-                    public void onResponse(Call<Propietario> call, Response<Propietario> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            propietarioCache = response.body();
-
-                            // Publico los valores “buenos” que vuelven del server
+                    @Override public void onResponse(Call<Propietario> call, Response<Propietario> resp) {
+                        if (resp.isSuccessful() && resp.body() != null) {
+                            propietarioCache = resp.body();
                             nombre.setValue(safe(propietarioCache.getNombre()));
                             apellido.setValue(safe(propietarioCache.getApellido()));
-                            dni.setValue(String.valueOf(safeNum(propietarioCache.getDni())));
+                            dni.setValue(safe(propietarioCache.getDni()));
                             email.setValue(safe(propietarioCache.getEmail()));
-                            telefono.setValue(String.valueOf(safeNum(propietarioCache.getTelefono())));
+                            telefono.setValue(safe(propietarioCache.getTelefono()));
 
                             editable.setValue(false);
                             botonTexto.setValue("Editar");
@@ -139,9 +112,7 @@ public class PerfilViewModel extends AndroidViewModel {
                             botonTexto.setValue("Editar");
                         }
                     }
-
-                    @Override
-                    public void onFailure(Call<Propietario> call, Throwable t) {
+                    @Override public void onFailure(Call<Propietario> call, Throwable t) {
                         Toast.makeText(getApplication(), "Error de servidor", Toast.LENGTH_SHORT).show();
                         editable.setValue(false);
                         botonTexto.setValue("Editar");
@@ -149,10 +120,9 @@ public class PerfilViewModel extends AndroidViewModel {
                 });
     }
 
-    // Helpers
     private boolean validar(String n, String a, String d, String t, String e) {
-        if (TextUtils.isEmpty(n) || TextUtils.isEmpty(a) ||
-                TextUtils.isEmpty(d) || TextUtils.isEmpty(t) || TextUtils.isEmpty(e)) {
+        if (TextUtils.isEmpty(n) || TextUtils.isEmpty(a) || TextUtils.isEmpty(d) ||
+                TextUtils.isEmpty(t) || TextUtils.isEmpty(e)) {
             Toast.makeText(getApplication(), "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -164,6 +134,5 @@ public class PerfilViewModel extends AndroidViewModel {
     }
 
     private static String safe(String s) { return s == null ? "" : s; }
-    private static String safeNum(Object o) { return o == null ? "" : String.valueOf(o); }
 }
 

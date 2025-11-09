@@ -1,4 +1,4 @@
-package com.example.inmobiliaria.ui.contratos;
+package com.example.inmobiliaria.ui.inquilinos;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,25 +16,25 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.inmobiliaria.R;
 
-public class ContratoFragment extends Fragment {
+public class InquilinosFragment extends Fragment {
 
     @Nullable @Override
     public View onCreateView(@NonNull LayoutInflater inf, @Nullable ViewGroup c, @Nullable Bundle b) {
-        View v = inf.inflate(R.layout.fragment_contrato, c, false);
+        View v = inf.inflate(R.layout.fragment_inquilinos, c, false);
 
-        ContratoViewModel vm = new ViewModelProvider(this).get(ContratoViewModel.class);
+        InquilinosViewModel vm = new ViewModelProvider(this).get(InquilinosViewModel.class);
 
-        RecyclerView rv = v.findViewById(R.id.rvContratos);
+        RecyclerView rv = v.findViewById(R.id.rvInquilinos);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
-        ContratoAdapter adapter = new ContratoAdapter(a -> {
+        InquilinosAdapter adapter = new InquilinosAdapter(a -> {
             Bundle args = new Bundle();
             args.putInt("contratoId", a.getIdContrato());
             Navigation.findNavController(v)
-                    .navigate(R.id.action_nav_contratos_to_nav_contrato_detalle, args);
+                    .navigate(R.id.action_nav_inquilinos_to_nav_inquilino_detalle, args);
         });
         rv.setAdapter(adapter);
 
-        SwipeRefreshLayout swipe = v.findViewById(R.id.swipeC);
+        SwipeRefreshLayout swipe = v.findViewById(R.id.swipe);
         swipe.setOnRefreshListener(vm::cargar);
 
         vm.getContratos().observe(getViewLifecycleOwner(), adapter::submit);

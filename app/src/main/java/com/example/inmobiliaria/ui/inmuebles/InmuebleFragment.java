@@ -1,78 +1,59 @@
 package com.example.inmobiliaria.ui.inmuebles;
 
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.inmobiliaria.R;
-import com.example.inmobiliaria.databinding.FragmentInmuebleBinding;
-import com.example.inmobiliaria.model.Inmueble;
 
 public class InmuebleFragment extends Fragment {
 
-    private FragmentInmuebleBinding binding;
-    private InmueblesViewModel viewModel;
-    private InmuebleAdapter adapter;
-    private ActivityResultLauncher<String> pickImage;
+    private InmueblesViewModel vm;
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentInmuebleBinding.inflate(inflater, container, false);
-        viewModel = new ViewModelProvider(this).get(InmueblesViewModel.class);
+    @Nullable @Override
+    public View onCreateView(@NonNull LayoutInflater inf, @Nullable ViewGroup c, @Nullable Bundle b) {
+        View v = inf.inflate(R.layout.fragment_inmueble, c, false);
 
-        adapter = new InmuebleAdapter(new InmuebleAdapter.InmuebleListener() {
-            @Override public void onToggleClick(Inmueble item) {
-                viewModel.alternarHabilitado(item);
-            }
-            @Override public void onItemClick(Inmueble item) {
-                Bundle args = new Bundle();
-                args.putInt("inmuebleId", item.getIdInmueble());
-                NavHostFragment.findNavController(InmuebleFragment.this)
-                        .navigate(R.id.action_nav_inmuebles_to_nav_contratos, args);
-            }
+        vm = new ViewModelProvider(this).get(InmueblesViewModel.class);
+
+        RecyclerView rv = v.findViewById(R.id.recycler);
+        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        InmuebleAdapter adapter = new InmuebleAdapter(i -> {
+            Bundle args = new Bundle();
+            args.putInt("inmuebleId", i.getIdInmueble());
+            Navigation.findNavController(v)
+                    .navigate(R.id.action_nav_inmuebles_to_nav_inmueble_detalle, args);
         });
-        binding.recycler.setAdapter(adapter);
+        rv.setAdapter(adapter);
 
-        // Observers (sin ifs)
-        viewModel.getInmuebles().observe(getViewLifecycleOwner(), adapter::submitList);
-        viewModel.getLoading().observe(getViewLifecycleOwner(), isLoading -> {
-            binding.swipeRefresh.setRefreshing(Boolean.TRUE.equals(isLoading));
-        });
-        viewModel.getSnackbar().observe(getViewLifecycleOwner(), msg -> {
-            android.widget.Toast.makeText(requireContext(), msg, android.widget.Toast.LENGTH_SHORT).show();
-        });
+        SwipeRefreshLayout swipe = v.findViewById(R.id.swipeRefresh);
+        swipe.setOnRefreshListener(vm::cargar);
 
-        binding.swipeRefresh.setOnRefreshListener(viewModel::cargarInmuebles);
+        EditText etTit  = v.findViewById(R.id.etTitulo);
+        EditText etDesc = v.findViewById(R.id.etDescripcion);
+        EditText etDir  = v.findViewById(R.id.etDireccion);
+        Button btnCrear = v.findViewById(R.id.btnCrear);
+        btnCrear.setOnClickListener(view ->
+                vm.crear(etTit.getText().toString(), etDesc.getText().toString(), etDir.getText().toString())
+        );
 
-        pickImage = registerForActivityResult(new ActivityResultContracts.GetContent(),
-                (Uri uri) -> viewModel.setFotoUriSeleccionada(uri));
-        binding.btnFoto.setOnClickListener(v -> pickImage.launch("image/*"));
+        vm.getInmuebles().observe(getViewLifecycleOwner(), adapter::submit);
+        vm.getLoading().observe(getViewLifecycleOwner(), swipe::setRefreshing);
 
-        binding.btnCrear.setOnClickListener(v -> {
-            viewModel.setNuevoTitulo(binding.etTitulo.getText().toString());
-            viewModel.setNuevaDescripcion(binding.etDescripcion.getText().toString());
-            viewModel.setNuevaDireccion(binding.etDireccion.getText().toString());
-            viewModel.crearInmueble();
-        });
-
-        viewModel.cargarInmuebles();
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+        vm.cargar(); // siempre carga, la VM decide si refresca o reutiliza cache
+        return v;
     }
 }
+

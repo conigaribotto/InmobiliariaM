@@ -3,7 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_menu"
-    app:startDestination="@id/nav_perfil">
+    app:startDestination="@id/nav_inicio">
+
+    <fragment
+        android:id="@+id/nav_inicio"
+        android:name="com.example.inmobiliaria.ui.inicio.InicioFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_inicio" />
 
     <fragment
         android:id="@+id/nav_perfil"
@@ -11,37 +17,83 @@
         android:label="@string/menu_profile"
         tools:layout="@layout/fragment_perfil">
         <action
-            android:id="@+id/action_nav_perfil_to_cambiarClaveFragment"
-            app:destination="@id/cambiarClaveFragment" />
+            android:id="@+id/action_nav_perfil_to_CambiarClaveFragment"
+            app:destination="@id/CambiarClaveFragment" />
     </fragment>
 
+    <fragment
+        android:id="@+id/CambiarClaveFragment"
+        android:name="com.example.inmobiliaria.ui.perfil.CambiarClaveFragment"
+        android:label="@string/menu_cambiar_clave"
+        tools:layout="@layout/fragment_cambiar_clave" />
+
+    <!-- INMUEBLES (lista) -->
     <fragment
         android:id="@+id/nav_inmuebles"
         android:name="com.example.inmobiliaria.ui.inmuebles.InmuebleFragment"
         android:label="@string/menu_inmuebles"
         tools:layout="@layout/fragment_inmueble">
-        <!-- Inmuebles -> Contratos -->
         <action
-            android:id="@+id/action_nav_inmuebles_to_nav_contratos"
-            app:destination="@id/nav_contratos" />
+            android:id="@+id/action_nav_inmuebles_to_nav_inmueble_detalle"
+            app:destination="@id/nav_inmueble_detalle" />
     </fragment>
 
-    <!-- NUEVO: Contratos (Alquiler) -->
+    <!-- DETALLE INMUEBLE -->
+    <fragment
+        android:id="@+id/nav_inmueble_detalle"
+        android:name="com.example.inmobiliaria.ui.inmuebles.InmuebleDetalleFragment"
+        android:label="@string/titulo_detalle_inmueble"
+        tools:layout="@layout/fragment_inmueble_detalle">
+        <argument
+            android:name="inmuebleId"
+            app:argType="integer" />
+    </fragment>
+
+    <!-- INQUILINOS (lista desde contratos) -->
+    <fragment
+        android:id="@+id/nav_inquilinos"
+        android:name="com.example.inmobiliaria.ui.inquilinos.InquilinosFragment"
+        android:label="@string/menu_inquilinos"
+        tools:layout="@layout/fragment_inquilinos">
+        <action
+            android:id="@+id/action_nav_inquilinos_to_nav_inquilino_detalle"
+            app:destination="@id/nav_inquilino_detalle" />
+    </fragment>
+
+    <!-- DETALLE INQUILINO (por contrato) -->
+    <fragment
+        android:id="@+id/nav_inquilino_detalle"
+        android:name="com.example.inmobiliaria.ui.inquilinos.InquilinoDetalleFragment"
+        android:label="@string/titulo_detalle_inquilino"
+        tools:layout="@layout/fragment_inquilino_detalle">
+        <argument
+            android:name="contratoId"
+            app:argType="integer" />
+    </fragment>
+
+    <!-- CONTRATOS (lista) -->
     <fragment
         android:id="@+id/nav_contratos"
         android:name="com.example.inmobiliaria.ui.contratos.ContratoFragment"
         android:label="@string/menu_contratos"
         tools:layout="@layout/fragment_contrato">
-        <argument
-            android:name="inmuebleId"
-            app:argType="integer" />
-        <!-- Contratos -> Pagos -->
         <action
-            android:id="@+id/action_nav_contratos_to_nav_pagos"
-            app:destination="@id/nav_pagos" />
+            android:id="@+id/action_nav_contratos_to_nav_contrato_detalle"
+            app:destination="@id/nav_contrato_detalle" />
     </fragment>
 
-    <!-- NUEVO: Pagos -->
+    <!-- DETALLE CONTRATO -->
+    <fragment
+        android:id="@+id/nav_contrato_detalle"
+        android:name="com.example.inmobiliaria.ui.contratos.ContratosDetalleFragment"
+        android:label="@string/titulo_detalle_contrato"
+        tools:layout="@layout/fragment_contratos_detalle">
+        <argument
+            android:name="contratoId"
+            app:argType="integer" />
+    </fragment>
+
+    <!-- (opcional) Pagos si lo necesitás -->
     <fragment
         android:id="@+id/nav_pagos"
         android:name="com.example.inmobiliaria.ui.pagos.PagoFragment"
@@ -51,15 +103,10 @@
             android:name="contratoId"
             app:argType="integer" />
     </fragment>
+
     <fragment
         android:id="@+id/nav_logout"
         android:name="com.example.inmobiliaria.ui.logout.LogoutFragment"
         android:label="@string/menu_logout"
         tools:layout="@layout/fragment_logout" />
-
-    <fragment
-        android:id="@+id/cambiarClaveFragment"
-        android:name="com.example.inmobiliaria.ui.perfil.CambiarClaveFragment"
-        android:label="@string/menu_cambiar_clave"
-        tools:layout="@layout/fragment_cambiar_clave" />
 </navigation>

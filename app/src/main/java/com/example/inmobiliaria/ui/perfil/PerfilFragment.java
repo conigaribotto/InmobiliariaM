@@ -53,7 +53,7 @@ public class PerfilFragment extends Fragment {
         );
 
         binding.btnClave.setOnClickListener(v ->
-                Navigation.findNavController(v).navigate(R.id.action_nav_perfil_to_cambiarClaveFragment)
+                Navigation.findNavController(v).navigate(R.id.action_nav_perfil_to_CambiarClaveFragment)
         );
 
         // Carga inicial

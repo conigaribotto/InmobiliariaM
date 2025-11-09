@@ -2,75 +2,92 @@ package com.example.inmobiliaria.ui.menu;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.inmobiliaria.R;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
-
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.inmobiliaria.R;
 import com.example.inmobiliaria.databinding.ActivityMenuBinding;
 import com.example.inmobiliaria.request.ApiClient;
+import com.example.inmobiliaria.ui.login.LoginActivity;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 public class MenuActivity extends AppCompatActivity {
 
-    private AppBarConfiguration mAppBarConfiguration;
+    private AppBarConfiguration appBarConfiguration;
     private ActivityMenuBinding binding;
+    private MenuViewModel vm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Guardia: si no hay token válido, volver a Login
+        if (!ApiClient.isTokenValido(this)) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
+
         binding = ActivityMenuBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMenu.toolbar);
-        binding.appBarMenu.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        binding.appBarMenu.fab.setOnClickListener(view ->
                 Snackbar.make(view, "Acción de ejemplo", Snackbar.LENGTH_LONG)
-                        .setAction("OK", null)
                         .setAnchorView(R.id.fab)
-                        .show();
+                        .show()
+        );
+
+        DrawerLayout drawer = binding.drawerLayout;
+        NavigationView navView = binding.navView;
+
+        appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_inicio,
+                R.id.nav_perfil,
+                R.id.nav_inmuebles,
+                R.id.nav_inquilinos,
+                R.id.nav_contratos
+        ).setOpenableLayout(drawer).build();
+
+        NavController navController =
+                Navigation.findNavController(this, R.id.nav_host_fragment_content_menu);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(navView, navController);
+
+        // Header: datos del propietario
+        vm = new ViewModelProvider(this).get(MenuViewModel.class);
+        vm.cargarPropietario();
+
+        View header = navView.getHeaderView(0);
+        TextView tvNombre = header.findViewById(R.id.tvHeaderNombre);
+        TextView tvEmail  = header.findViewById(R.id.tvHeaderEmail);
+
+        vm.getPropietario().observe(this, p -> {
+            if (p != null) {
+                tvNombre.setText(p.getNombre() + " " + p.getApellido());
+                tvEmail.setText(p.getEmail());
             }
         });
 
-        DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
-
-        // Top-level SOLO los destinos que EXISTEN en nav_graph_menu
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_perfil,
-                R.id.nav_inmuebles
-        ).setOpenableLayout(drawer).build();
-
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_menu);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
-
-        navigationView.setNavigationItemSelectedListener(item -> {
-            int id = item.getItemId();
-
-            if (id == R.id.nav_login) {
-                startActivity(new Intent(MenuActivity.this, com.example.inmobiliaria.ui.login.LoginActivity.class));
-                drawer.closeDrawers();
-                return true;
-            } else if (id == R.id.nav_logout) {
-                // limpiar token y avisar
-                ApiClient.guardarToken(this, null);
-                Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show();
-                drawer.closeDrawers();
+        // Logout
+        navView.setNavigationItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.nav_logout) {
+                ApiClient.borrarToken(this);
+                Toast.makeText(this, getString(R.string.logout_ok), Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
                 return true;
             }
-
             boolean handled = NavigationUI.onNavDestinationSelected(item, navController);
             if (handled) drawer.closeDrawers();
             return handled;
@@ -78,15 +95,11 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
     public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_menu);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+        NavController navController =
+                Navigation.findNavController(this, R.id.nav_host_fragment_content_menu);
+        return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
 }
+

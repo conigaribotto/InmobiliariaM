@@ -3,91 +3,58 @@ package com.example.inmobiliaria.ui.inmuebles;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.inmobiliaria.R;
 import com.example.inmobiliaria.model.Inmueble;
 
-public class InmuebleAdapter extends ListAdapter<Inmueble, InmuebleAdapter.VH> {
+import java.util.ArrayList;
+import java.util.List;
 
-    public interface InmuebleListener {
-        void onToggleClick(Inmueble item);
-        void onItemClick(Inmueble item);
+public class InmuebleAdapter extends RecyclerView.Adapter<InmuebleAdapter.VH> {
+
+    public interface OnItemClick { void onClick(Inmueble i); }
+
+    private final List<Inmueble> data = new ArrayList<>();
+    private final OnItemClick listener;
+
+    public InmuebleAdapter(OnItemClick l) { this.listener = l; }
+
+    public void submit(List<Inmueble> nuevos) {
+        data.clear();
+        if (nuevos != null) data.addAll(nuevos);
+        notifyDataSetChanged();
     }
 
-    private final InmuebleListener listener;
-
-    public InmuebleAdapter(InmuebleListener l) {
-        super(DIFF);
-        this.listener = l;
-    }
-
-    private static final DiffUtil.ItemCallback<Inmueble> DIFF = new DiffUtil.ItemCallback<Inmueble>() {
-        @Override
-        public boolean areItemsTheSame(@NonNull Inmueble oldItem, @NonNull Inmueble newItem) {
-            return oldItem.getIdInmueble() == newItem.getIdInmueble();
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull Inmueble oldItem, @NonNull Inmueble newItem) {
-            return
-                    safe(oldItem.getTitulo()).equals(safe(newItem.getTitulo())) &&
-                            safe(oldItem.getDireccion()).equals(safe(newItem.getDireccion())) &&
-                            oldItem.isHabilitado() == newItem.isHabilitado() &&
-                            safe(oldItem.getFotoUrl()).equals(safe(newItem.getFotoUrl()));
-        }
-
-        private String safe(String s) { return s == null ? "" : s; }
-    };
-
-    @NonNull
-    @Override
-    public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_inmueble, parent, false);
+    @NonNull @Override public VH onCreateViewHolder(@NonNull ViewGroup p, int vtype) {
+        View v = LayoutInflater.from(p.getContext()).inflate(R.layout.item_inmueble, p, false);
         return new VH(v);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull VH h, int position) {
-        Inmueble item = getItem(position);
-
-        h.tvTitulo.setText(item.getTitulo());
-        h.tvDireccion.setText(item.getDireccion());
-        h.tvEstado.setText(item.isHabilitado() ? "Habilitado" : "Deshabilitado");
-        h.btnToggle.setText(item.isHabilitado() ? "Deshabilitar" : "Habilitar");
-
-        String url = item.getFotoUrl();
-        Glide.with(h.img.getContext())
-                .load(url)
-                .placeholder(android.R.drawable.ic_menu_gallery)
-                .error(android.R.drawable.ic_menu_report_image)
-                .into(h.img);
-
-        h.itemView.setOnClickListener(v -> listener.onItemClick(item));
-        h.btnToggle.setOnClickListener(v -> listener.onToggleClick(item));
+    @Override public void onBindViewHolder(@NonNull VH h, int pos) {
+        Inmueble i = data.get(pos);
+        String titulo = i.getTitulo() != null ? i.getTitulo() : ("Inmueble #" + i.getIdInmueble());
+        h.tvTitulo.setText(titulo);
+        h.tvDireccion.setText(i.getDireccion() != null ? i.getDireccion() : "");
+        // Quitamos precio porque tu modelo no lo tiene
+        h.itemView.setOnClickListener(v -> listener.onClick(i));
     }
 
-    static class VH extends RecyclerView.ViewHolder {
-        ImageView img;
-        TextView tvTitulo, tvDireccion, tvEstado;
-        Button btnToggle;
+    @Override public int getItemCount() { return data.size(); }
 
-        VH(@NonNull View itemView) {
-            super(itemView);
-            img = itemView.findViewById(R.id.imgFoto);
-            tvTitulo = itemView.findViewById(R.id.tvTitulo);
-            tvDireccion = itemView.findViewById(R.id.tvDireccion);
-            tvEstado = itemView.findViewById(R.id.tvEstado);
-            btnToggle = itemView.findViewById(R.id.btnToggle);
+    static class VH extends RecyclerView.ViewHolder {
+        TextView tvTitulo, tvDireccion, tvPrecio; // tvPrecio queda opcional (no se usa)
+        VH(@NonNull View v) {
+            super(v);
+            tvTitulo = v.findViewById(R.id.tvTitulo);
+            tvDireccion = v.findViewById(R.id.tvDireccion);
+            // Si tu item_inmueble.xml no tiene tvPrecio, podés comentar la línea de abajo
+            tvPrecio   = v.findViewById(R.id.tvPrecio);
         }
     }
 }
+
 

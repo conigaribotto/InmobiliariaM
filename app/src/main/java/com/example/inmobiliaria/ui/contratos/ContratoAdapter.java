@@ -1,10 +1,8 @@
 package com.example.inmobiliaria.ui.contratos;
 
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,58 +11,63 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.inmobiliaria.R;
 import com.example.inmobiliaria.model.Alquiler;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class ContratoAdapter extends RecyclerView.Adapter<ContratoAdapter.VH> {
 
-    public interface OnContratoListener {
-        void onVerPagos(Alquiler contrato);
-    }
+    public interface OnItemClick { void onClick(Alquiler a); }
 
     private final List<Alquiler> data = new ArrayList<>();
-    private final OnContratoListener listener;
-    private final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    private final OnItemClick listener;
 
-    public ContratoAdapter(OnContratoListener listener) {
-        this.listener = listener;
-    }
+    public ContratoAdapter(OnItemClick l) { listener = l; }
 
-    public void submit(List<Alquiler> list) {
+    public void submit(List<Alquiler> nuevos) {
         data.clear();
-        if (list != null) data.addAll(list);
+        if (nuevos != null) data.addAll(nuevos);
         notifyDataSetChanged();
     }
 
     @NonNull @Override
-    public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_contrato, parent, false);
+    public VH onCreateViewHolder(@NonNull ViewGroup p, int vtype) {
+        View v = LayoutInflater.from(p.getContext()).inflate(R.layout.item_contrato, p, false);
         return new VH(v);
     }
 
-    @Override public void onBindViewHolder(@NonNull VH h, int pos) {
-        Alquiler c = data.get(pos);
-        h.tvNumero.setText(h.itemView.getContext().getString(R.string.contrato_numero) + c.getIdAlquiler());
-        h.tvPrecio.setText(h.itemView.getContext().getString(R.string.contrato_precio, String.valueOf(c.getPrecio())));
-        String fi = c.getFechaInicio() != null ? c.getFechaInicio().toLocalDate().toString() : "-";
-        String ff = c.getFechaFin() != null ? c.getFechaFin().toLocalDate().toString() : "-";
-        h.tvPeriodo.setText(h.itemView.getContext().getString(R.string.contrato_periodo, fi, ff));
-        h.btnPagos.setOnClickListener(v -> listener.onVerPagos(c));
+    @Override
+    public void onBindViewHolder(@NonNull VH h, int pos) {
+        Alquiler a = data.get(pos);
+
+        String inq = (a.getInquilino()!=null)
+                ? (nz(a.getInquilino().getNombre()) + " " + nz(a.getInquilino().getApellido()))
+                : "Inquilino";
+
+        String dir = (a.getInmueble()!=null) ? nz(a.getInmueble().getDireccion()) : "Inmueble";
+
+        // En tu modelo las fechas son String:
+        String f1 = nz(a.getFechaInicio());
+        String f2 = nz(a.getFechaFinalizacion());
+
+        h.tvInquilino.setText(inq);
+        h.tvInmueble.setText(dir);
+        h.tvPeriodo.setText("Periodo: " + (f1.isEmpty() ? "?" : f1) + " a " + (f2.isEmpty() ? "?" : f2));
+
+        h.itemView.setOnClickListener(v -> listener.onClick(a));
     }
 
     @Override public int getItemCount() { return data.size(); }
 
     static class VH extends RecyclerView.ViewHolder {
-        TextView tvNumero, tvPrecio, tvPeriodo;
-        Button btnPagos;
+        TextView tvInquilino, tvInmueble, tvPeriodo;
         VH(@NonNull View v) {
             super(v);
-            tvNumero = v.findViewById(R.id.tvNumero);
-            tvPrecio = v.findViewById(R.id.tvPrecio);
-            tvPeriodo = v.findViewById(R.id.tvPeriodo);
-            btnPagos = v.findViewById(R.id.btnPagos);
+            tvInquilino = v.findViewById(R.id.tvInquilino);
+            tvInmueble  = v.findViewById(R.id.tvInmueble);
+            tvPeriodo   = v.findViewById(R.id.tvPeriodo);
         }
     }
+
+    private static String nz(Object o){ return o==null? "" : String.valueOf(o); }
 }
+

@@ -15,7 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <!-- Campos de alta rápida -->
             <EditText
                 android:id="@+id/etTitulo"
                 android:hint="@string/inmueble_titulo"
@@ -60,7 +59,6 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"/>
         </LinearLayout>
-
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -72,4 +70,5 @@
         android:layout_margin="16dp"
         app:layout_anchor="@id/swipeRefresh"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 

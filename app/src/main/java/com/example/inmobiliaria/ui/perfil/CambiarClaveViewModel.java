@@ -1,7 +1,7 @@
 package com.example.inmobiliaria.ui.perfil;
 
 import android.app.Application;
-import android.util.Log;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -9,7 +9,6 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.inmobiliaria.model.Propietario;
 import com.example.inmobiliaria.request.ApiClient;
 
 import retrofit2.Call;
@@ -18,19 +17,14 @@ import retrofit2.Response;
 
 public class CambiarClaveViewModel extends AndroidViewModel {
 
-    private MutableLiveData<Boolean> limpiarCampos = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> limpiarCampos = new MutableLiveData<>(false);
+    public LiveData<Boolean> getLimpiarCampos() { return limpiarCampos; }
 
-    public LiveData<Boolean> getLimpiarCampos() {
-        return limpiarCampos;
-    }
-    public CambiarClaveViewModel(@NonNull Application application) {
-        super(application);
-    }
+    public CambiarClaveViewModel(@NonNull Application application) { super(application); }
 
-    public void cambiarClave(String actual, String nueva, String confirmar){
-        if (actual.isEmpty() || nueva.isEmpty() || confirmar.isEmpty()) {
+    public void cambiarClave(String actual, String nueva, String confirmar) {
+        if (TextUtils.isEmpty(actual) || TextUtils.isEmpty(nueva) || TextUtils.isEmpty(confirmar)) {
             Toast.makeText(getApplication(), "No pueden haber campos vacíos", Toast.LENGTH_SHORT).show();
-
             return;
         }
         if (!nueva.equals(confirmar)) {
@@ -38,33 +32,23 @@ public class CambiarClaveViewModel extends AndroidViewModel {
             return;
         }
 
-        String token = ApiClient.obtenerToken(getApplication());
-        Call<Void> llamada = ApiClient.getInmobiliariaService().cambiarClave("Bearer " + token,actual,nueva);
-        llamada.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(getApplication(), "Contraseña cambiada con éxito", Toast.LENGTH_SHORT).show();
-                    limpiarCampos.postValue(true);
-                } else {
-                    Toast.makeText(getApplication(), "Error al cambiar contraseña", Toast.LENGTH_SHORT).show();
-                    Log.e("Error", response.message());
-                    limpiarCampos.postValue(true);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(getApplication(), "Error de servidor", Toast.LENGTH_SHORT).show();
-                Log.e("CambiarClave", t.getMessage());
-                limpiarCampos.postValue(true);
-            }
-        });
+        ApiClient.getInmobiliariaService()
+                .cambiarClave(actual, nueva)  // Interceptor agrega el Bearer
+                .enqueue(new Callback<Void>() {
+                    @Override public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(getApplication(), "Contraseña cambiada con éxito", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getApplication(), "Error al cambiar contraseña", Toast.LENGTH_SHORT).show();
+                        }
+                        limpiarCampos.postValue(true);
+                    }
+                    @Override public void onFailure(Call<Void> call, Throwable t) {
+                        Toast.makeText(getApplication(), "Error de servidor", Toast.LENGTH_SHORT).show();
+                        limpiarCampos.postValue(true);
+                    }
+                });
     }
 
-    public void resetearLimpiarCampos() {
-        limpiarCampos.setValue(false);
-    }
-
-
+    public void resetearLimpiarCampos() { limpiarCampos.setValue(false); }
 }

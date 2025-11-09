@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.inmobiliaria.databinding.ActivityLoginBinding;
@@ -25,37 +24,23 @@ public class LoginActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(LoginActivityViewModel.class);
 
-        // Observa mensajes
-        viewModel.getMensaje().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String msg) {
-                Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+        viewModel.getMensaje().observe(this,
+                msg -> Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show());
+
+        viewModel.getLoginExitoso().observe(this, ok -> {
+            if (ok) {
+                startActivity(new Intent(LoginActivity.this, MenuActivity.class));
+                finish();
             }
         });
 
-        // Observa éxito de login
-        viewModel.getLoginExitoso().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean ok) {
-                if (ok) {
-                    Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }
+        binding.btnLogin.setOnClickListener((View v) -> {
+            String usuario = binding.etUsuario.getText().toString();
+            String clave = binding.etClave.getText().toString();
+            viewModel.login(usuario, clave);
         });
 
-        // Listener del botón
-        binding.btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String usuario = binding.etUsuario.getText().toString();
-                String clave = binding.etClave.getText().toString();
-                viewModel.login(usuario, clave);
-            }
-        });
-
-        // Si ya tiene token, ir directo al menú
+        // Si ya hay token válido, ir al Menú
         viewModel.verificarSesion();
     }
 }

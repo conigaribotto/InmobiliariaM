@@ -18,9 +18,10 @@
     <string name="menu_menu">Menú principal</string>
     <string name="menu_title">Menú principal</string>
 
-    <!-- Opciones del Drawer -->
+    <!-- Opciones del Nav -->
     <string name="menu_profile">Perfil</string>
     <string name="menu_inmuebles">Inmuebles</string>
+    <string name="menu_inquilinos">Inquilinos</string>
     <string name="menu_contratos">Contratos</string>
     <string name="menu_logout">Cerrar sesión</string>
     <string name="menu_cambiar_clave">Cambiar clave</string>
@@ -54,7 +55,7 @@
     <string name="btn_ingresar">Ingresar</string>
     <string name="btn_salir">Salir</string>
 
-    <!-- Contratos -->
+    <!-- Contratos / Pagos -->
     <string name="menu_pagos">Pagos</string>
     <string name="contratos_titulo">Contratos</string>
     <string name="contrato_numero">Contrato #</string>
@@ -71,26 +72,28 @@
     <string name="pago_fecha">Fecha: %1$s</string>
     <string name="pagos_vacio">No hay pagos para este contrato</string>
 
-
-    <!-- Inmuebles -->
+    <!-- Inmuebles (crear) -->
     <string name="inmueble_agregar">Agregar inmueble</string>
     <string name="inmueble_foto_desc">Foto del inmueble</string>
     <string name="inmueble_titulo_placeholder">Título del inmueble</string>
     <string name="inmueble_direccion_placeholder">Dirección</string>
     <string name="inmueble_estado_placeholder">Estado</string>
     <string name="inmueble_toggle">Cambiar</string>
+    <string name="inmueble_titulo">Título</string>
 
+    <!-- Hints usados por view_agregar_inmueble -->
     <string name="inmueble_titulo_hint">Título</string>
     <string name="inmueble_descripcion_hint">Descripción</string>
     <string name="inmueble_direccion_hint">Dirección</string>
+
     <string name="inmueble_elegir_foto">Elegir foto</string>
-    <string name="inmueble_titulo">Título</string>
     <string name="inmueble_desc">Descripción</string>
     <string name="inmueble_dir">Dirección</string>
     <string name="inmueble_btn_foto">Foto</string>
     <string name="inmueble_btn_crear">Crear</string>
     <string name="inmueble_habilitado">Habilitado</string>
-    <!-- Logout -->
+
+    <!-- Logout / Forgot -->
     <string name="forgot_title">Recuperar contraseña</string>
     <string name="forgot_hint_email">Email</string>
     <string name="forgot_send">Enviar enlace</string>
@@ -102,6 +105,9 @@
     <string name="logout_confirmar">Cerrar sesión</string>
     <string name="logout_cancelar">Cancelar</string>
 
-
+    <string name="titulo_detalle_inmueble">Detalle del Inmueble</string>
+    <string name="titulo_detalle_inquilino">Detalle del Inquilino</string>
+    <string name="titulo_detalle_contrato">Detalle del Contrato</string>
 </resources>
+
 

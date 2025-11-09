@@ -1,6 +1,5 @@
 package com.example.inmobiliaria.ui.pagos;
 
-
 import android.app.Application;
 
 import androidx.annotation.NonNull;
@@ -35,9 +34,9 @@ public class PagoViewModel extends AndroidViewModel {
         loading.postValue(true);
         empty.postValue(false);
 
-        String token = ApiClient.obtenerToken(getApplication());
+        // Sin header manual
         Call<List<Pagos>> call = ApiClient.getInmobiliariaService()
-                .obtenerPagosPorContrato("Bearer " + token, contratoId);
+                .obtenerPagosPorContrato(contratoId);
 
         call.enqueue(new Callback<List<Pagos>>() {
             @Override public void onResponse(Call<List<Pagos>> call, Response<List<Pagos>> response) {
@@ -59,3 +58,4 @@ public class PagoViewModel extends AndroidViewModel {
         });
     }
 }
+
