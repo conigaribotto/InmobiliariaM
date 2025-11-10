@@ -70,7 +70,7 @@ dependencies {
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
-
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
     // Desugar (para java.time, etc.)
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 

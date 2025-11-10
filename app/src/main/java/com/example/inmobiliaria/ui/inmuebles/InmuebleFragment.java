@@ -1,12 +1,16 @@
 package com.example.inmobiliaria.ui.inmuebles;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -21,8 +25,21 @@ import com.example.inmobiliaria.R;
 public class InmuebleFragment extends Fragment {
 
     private InmueblesViewModel vm;
+    private Uri selectedImageUri;
+    private ImageView ivFoto;
 
-    @Nullable @Override
+    private final ActivityResultLauncher<String> pickImageLauncher =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+                // Solo mostramos si realmente eligieron una imagen
+                if (uri != null) {
+                    selectedImageUri = uri;
+                    ivFoto.setVisibility(View.VISIBLE);
+                    ivFoto.setImageURI(uri);
+                }
+            });
+
+    @Nullable
+    @Override
     public View onCreateView(@NonNull LayoutInflater inf, @Nullable ViewGroup c, @Nullable Bundle b) {
         View v = inf.inflate(R.layout.fragment_inmueble, c, false);
 
@@ -44,16 +61,28 @@ public class InmuebleFragment extends Fragment {
         EditText etTit  = v.findViewById(R.id.etTitulo);
         EditText etDesc = v.findViewById(R.id.etDescripcion);
         EditText etDir  = v.findViewById(R.id.etDireccion);
+        Button btnFoto  = v.findViewById(R.id.btnFoto);
         Button btnCrear = v.findViewById(R.id.btnCrear);
-        btnCrear.setOnClickListener(view ->
-                vm.crear(etTit.getText().toString(), etDesc.getText().toString(), etDir.getText().toString())
-        );
+        ivFoto = v.findViewById(R.id.ivFoto);
+
+        // La imagen arranca oculta (se muestra tras elegir)
+        ivFoto.setVisibility(View.GONE);
+
+        btnFoto.setOnClickListener(view -> pickImageLauncher.launch("image/*"));
+
+        btnCrear.setOnClickListener(view -> {
+            String titulo = etTit.getText().toString();
+            String desc   = etDesc.getText().toString();
+            String dir    = etDir.getText().toString();
+            vm.crear(titulo, desc, dir, selectedImageUri, requireContext());
+        });
 
         vm.getInmuebles().observe(getViewLifecycleOwner(), adapter::submit);
         vm.getLoading().observe(getViewLifecycleOwner(), swipe::setRefreshing);
 
-        vm.cargar(); // siempre carga, la VM decide si refresca o reutiliza cache
+        vm.cargar();
         return v;
     }
 }
+
 
