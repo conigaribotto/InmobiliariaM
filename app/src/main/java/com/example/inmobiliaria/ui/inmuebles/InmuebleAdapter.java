@@ -39,19 +39,18 @@ public class InmuebleAdapter extends RecyclerView.Adapter<InmuebleAdapter.VH> {
         String titulo = i.getTitulo() != null ? i.getTitulo() : ("Inmueble #" + i.getIdInmueble());
         h.tvTitulo.setText(titulo);
         h.tvDireccion.setText(i.getDireccion() != null ? i.getDireccion() : "");
-        // Quitamos precio porque tu modelo no lo tiene
+
         h.itemView.setOnClickListener(v -> listener.onClick(i));
     }
 
     @Override public int getItemCount() { return data.size(); }
 
     static class VH extends RecyclerView.ViewHolder {
-        TextView tvTitulo, tvDireccion, tvPrecio; // tvPrecio queda opcional (no se usa)
+        TextView tvTitulo, tvDireccion, tvPrecio;
         VH(@NonNull View v) {
             super(v);
             tvTitulo = v.findViewById(R.id.tvTitulo);
             tvDireccion = v.findViewById(R.id.tvDireccion);
-            // Si tu item_inmueble.xml no tiene tvPrecio, podés comentar la línea de abajo
             tvPrecio   = v.findViewById(R.id.tvPrecio);
         }
     }

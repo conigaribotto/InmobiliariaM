@@ -57,7 +57,7 @@ public class ContratosDetalleViewModel extends AndroidViewModel {
                                         ? ("Contrato #" + a.getIdContrato())
                                         : ("Desde " + f1 + " hasta " + f2);
 
-                                // Monto con getMontoAlquiler()
+
                                 String montoTxt = "$ " + a.getMontoAlquiler();
 
                                 inquilino.postValue(nom);
@@ -67,7 +67,7 @@ public class ContratosDetalleViewModel extends AndroidViewModel {
                                 return;
                             }
                         }
-                        // No encontrado → publicar vacíos (la UI no necesita if)
+
                         inquilino.postValue(""); inmueble.postValue(""); fechas.postValue(""); monto.postValue("");
                     }
 

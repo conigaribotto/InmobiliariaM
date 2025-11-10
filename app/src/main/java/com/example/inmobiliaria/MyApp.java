@@ -7,6 +7,6 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        ApiClient.init(this); // Inicializa Retrofit + Interceptor
+        ApiClient.init(this);
     }
 }

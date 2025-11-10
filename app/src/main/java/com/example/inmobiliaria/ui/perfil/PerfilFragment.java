@@ -23,7 +23,7 @@ public class PerfilFragment extends Fragment {
         binding = FragmentPerfilBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this).get(PerfilViewModel.class);
 
-        // Observa y pinta — sin ifs
+
         viewModel.getNombre().observe(getViewLifecycleOwner(), v -> binding.etNombre.setText(v));
         viewModel.getApellido().observe(getViewLifecycleOwner(), v -> binding.etApellido.setText(v));
         viewModel.getDni().observe(getViewLifecycleOwner(), v -> binding.etDni.setText(v));
@@ -33,7 +33,6 @@ public class PerfilFragment extends Fragment {
         viewModel.getEditable().observe(getViewLifecycleOwner(), editable -> {
             binding.etNombre.setEnabled(editable);
             binding.etApellido.setEnabled(editable);
-            // DNI siempre NO editable (requisito)
             binding.etDni.setEnabled(false);
             binding.etEmail.setEnabled(editable);
             binding.etTelefono.setEnabled(editable);
@@ -56,7 +55,6 @@ public class PerfilFragment extends Fragment {
                 Navigation.findNavController(v).navigate(R.id.action_nav_perfil_to_CambiarClaveFragment)
         );
 
-        // Carga inicial
         viewModel.cargarPropietario();
 
         return binding.getRoot();

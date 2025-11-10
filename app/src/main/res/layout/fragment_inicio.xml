@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Título opcional arriba -->
     <LinearLayout
         android:orientation="vertical"
         android:padding="16dp"
@@ -18,7 +17,6 @@
             android:layout_height="wrap_content"
             android:text="Dirección de la Inmobiliaria"/>
 
-        <!-- El mapa ocupa el resto de la pantalla -->
         <com.google.android.gms.maps.MapView
             android:id="@+id/mapView"
             android:layout_width="match_parent"

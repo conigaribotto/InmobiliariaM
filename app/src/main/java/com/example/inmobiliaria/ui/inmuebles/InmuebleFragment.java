@@ -30,7 +30,7 @@ public class InmuebleFragment extends Fragment {
 
     private final ActivityResultLauncher<String> pickImageLauncher =
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
-                // Solo mostramos si realmente eligieron una imagen
+
                 if (uri != null) {
                     selectedImageUri = uri;
                     ivFoto.setVisibility(View.VISIBLE);
@@ -65,7 +65,7 @@ public class InmuebleFragment extends Fragment {
         Button btnCrear = v.findViewById(R.id.btnCrear);
         ivFoto = v.findViewById(R.id.ivFoto);
 
-        // La imagen arranca oculta (se muestra tras elegir)
+
         ivFoto.setVisibility(View.GONE);
 
         btnFoto.setOnClickListener(view -> pickImageLauncher.launch("image/*"));

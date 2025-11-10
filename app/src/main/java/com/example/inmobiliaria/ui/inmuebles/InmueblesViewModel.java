@@ -35,7 +35,6 @@ public class InmueblesViewModel extends AndroidViewModel {
     public LiveData<List<Inmueble>> getInmuebles() { return inmuebles; }
     public LiveData<Boolean> getLoading() { return loading; }
 
-    /** Lista de inmuebles del propietario autenticado (token por interceptor). */
     public void cargar() {
         loading.postValue(true);
         ApiClient.getInmobiliariaService()
@@ -54,10 +53,6 @@ public class InmueblesViewModel extends AndroidViewModel {
                 });
     }
 
-    /**
-     * Crea un inmueble enviando título, descripción, dirección y una foto (opcional) seleccionada
-     * desde galería (Uri). Si no hay foto, se envía una parte vacía para cumplir el @Multipart.
-     */
     public void crear(String tituloS, String descS, String dirS, Uri imageUri, Context ctx) {
         try {
             RequestBody titulo = RequestBody.create(MediaType.parse("text/plain"), nz(tituloS));
@@ -70,7 +65,7 @@ public class InmueblesViewModel extends AndroidViewModel {
                 RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), bytes);
                 fotoPart = MultipartBody.Part.createFormData("foto", "foto.jpg", reqFile);
             } else {
-                // Parte vacía para cumplir la firma del endpoint
+
                 fotoPart = MultipartBody.Part.createFormData(
                         "foto", "",
                         RequestBody.create(MediaType.parse("application/octet-stream"), new byte[0])
@@ -101,7 +96,6 @@ public class InmueblesViewModel extends AndroidViewModel {
         }
     }
 
-    // ===== Helpers =====
     private String nz(String s) { return s == null ? "" : s; }
 
     private byte[] readAll(Context ctx, Uri uri) throws Exception {

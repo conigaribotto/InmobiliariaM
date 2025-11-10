@@ -23,12 +23,12 @@ public class PagoFragment extends Fragment {
         binding = FragmentPagoBinding.inflate(inflater, container, false);
         vm = new ViewModelProvider(this).get(PagoViewModel.class);
 
-        // Recycler + adapter
+
         adapter = new PagoAdapter();
         binding.rvPagos.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvPagos.setAdapter(adapter);
 
-        // Observers
+
         vm.getPagos().observe(getViewLifecycleOwner(), adapter::submit);
 
         vm.getLoading().observe(getViewLifecycleOwner(), loading -> {
@@ -39,7 +39,7 @@ public class PagoFragment extends Fragment {
             binding.tvVacioPagos.setVisibility(Boolean.TRUE.equals(empty) ? View.VISIBLE : View.GONE);
         });
 
-        // Tomamos el contratoId de los argumentos y dispararmos la carga
+
         final int contratoId = requireArguments().getInt("contratoId", 0);
         vm.cargarPagos(contratoId);
 

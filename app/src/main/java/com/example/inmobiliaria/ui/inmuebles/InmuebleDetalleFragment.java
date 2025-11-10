@@ -21,7 +21,6 @@ public class InmuebleDetalleFragment extends Fragment {
 
         InmuebleDetalleViewModel vm = new ViewModelProvider(this).get(InmuebleDetalleViewModel.class);
 
-        // Recibe el argumento y se lo pasa a la VM
         int id = requireArguments().getInt("inmuebleId");
         vm.init(id);
 

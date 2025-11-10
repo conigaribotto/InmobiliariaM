@@ -12,7 +12,6 @@ import com.example.inmobiliaria.request.ApiClient;
 
 public class LogoutViewModel extends AndroidViewModel {
 
-    // Evento de navegación: emitimos cualquier objeto para disparar
     private final MutableLiveData<Object> navigateToLogin = new MutableLiveData<>();
 
     public LogoutViewModel(@NonNull Application app) {
@@ -23,7 +22,6 @@ public class LogoutViewModel extends AndroidViewModel {
 
     public void confirmarLogout() {
         ApiClient.borrarToken(getApplication());
-        // Dispara navegación
         navigateToLogin.postValue(new Object());
     }
 }

@@ -3,20 +3,19 @@ package com.example.inmobiliaria.model;
 public class Inmueble {
     private int idInmueble;
     private String direccion;
-    private String uso;          // en la API suele venir como "Residencial/Comercial"
-    private String tipo;         // "Casa/Departamento" (lo usamos como "titulo" en la UI)
+    private String uso;
+    private String tipo;
     private int ambientes;
     private double superficie;
     private Double latitud;
     private Double longitud;
     private Double valor;
-    private String imagen;       // e.g. "uploads\\file.jpg"
-    private boolean disponible;  // en la API: "disponible": true/false
-    private int idPropietario;   // dueños/relación
-    private Propietario duenio;  // opcional, por si viene expandido
+    private String imagen;
+    private boolean disponible;
+    private int idPropietario;
+    private Propietario duenio;
     private Boolean tieneContratoVigente;
 
-    // ====== Getters/Setters base ======
     public int getIdInmueble() { return idInmueble; }
     public void setIdInmueble(int idInmueble) { this.idInmueble = idInmueble; }
 
@@ -59,25 +58,18 @@ public class Inmueble {
     public Boolean getTieneContratoVigente() { return tieneContratoVigente; }
     public void setTieneContratoVigente(Boolean tieneContratoVigente) { this.tieneContratoVigente = tieneContratoVigente; }
 
-    // ====== Helpers para TU UI (compatibilidad con tu Adapter/ViewModel) ======
-
-    // Tu adapter usa "getTitulo()" para mostrar: devolvemos "tipo" como título.
     public String getTitulo() {
         return tipo == null ? "" : tipo;
     }
 
-    // Tu adapter usa "isHabilitado()" (nosotros mapeamos a 'disponible')
     public boolean isHabilitado() {
         return disponible;
     }
 
-    // Para que funcione tanto setHabilitado como setDisponible
     public void setHabilitado(boolean habilitado) {
         this.disponible = habilitado;
     }
 
-    // Tu adapter usa "getFotoUrl()". Normalizamos barras invertidas.
-    // (Si la API devuelve rutas relativas, Glide podría necesitar que las transformes a absolutas.)
     public String getFotoUrl() {
         if (imagen == null) return "";
         // normaliza backslashes -> slashes
@@ -85,8 +77,6 @@ public class Inmueble {
         return clean;
     }
 
-    // Por si en otros lados esperás "getIdPropietario()" (ya definido arriba)
-    // y métodos de compatibilidad que pudieras haber usado antes:
     public String getDireccionSafe() {
         return direccion == null ? "" : direccion;
     }

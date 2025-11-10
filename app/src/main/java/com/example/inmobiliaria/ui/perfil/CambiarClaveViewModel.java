@@ -33,7 +33,7 @@ public class CambiarClaveViewModel extends AndroidViewModel {
         }
 
         ApiClient.getInmobiliariaService()
-                .cambiarClave(actual, nueva)  // Interceptor agrega el Bearer
+                .cambiarClave(actual, nueva)
                 .enqueue(new Callback<Void>() {
                     @Override public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.isSuccessful()) {

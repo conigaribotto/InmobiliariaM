@@ -41,7 +41,6 @@ public class ApiClient {
     private static Retrofit retrofit;
     private static InmobiliariaService service;
 
-    /** Llamar desde MyApp.onCreate() */
     public static void init(Context context) {
         if (retrofit != null) return;
 
@@ -84,9 +83,6 @@ public class ApiClient {
         return service;
     }
 
-    // ===========================
-    // ENDPOINTS
-    // ===========================
     public interface InmobiliariaService {
 
         @FormUrlEncoded
@@ -130,9 +126,6 @@ public class ApiClient {
         Call<List<Pagos>> obtenerPagosPorContrato(@Path("id") int contratoId);
     }
 
-    // ===========================
-    // SharedPreferences
-    // ===========================
     public static void guardarToken(Context ctx, String token) {
         if (token == null) return;
         token = token.trim().replace("\"", "");

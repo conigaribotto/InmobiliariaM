@@ -45,7 +45,6 @@ public class ContratoAdapter extends RecyclerView.Adapter<ContratoAdapter.VH> {
 
         String dir = (a.getInmueble()!=null) ? nz(a.getInmueble().getDireccion()) : "Inmueble";
 
-        // En tu modelo las fechas son String:
         String f1 = nz(a.getFechaInicio());
         String f2 = nz(a.getFechaFinalizacion());
 

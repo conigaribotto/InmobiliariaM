@@ -29,14 +29,13 @@ public class InmuebleDetalleViewModel extends AndroidViewModel {
 
     public InmuebleDetalleViewModel(@NonNull Application app) { super(app); }
 
-    // Se llama desde el Fragment
     public void init(int id) { this.inmuebleId = id; }
 
     public LiveData<String> getTitulo()    { return titulo; }
     public LiveData<String> getDireccion() { return direccion; }
     public LiveData<String> getAmbientes() { return ambientes; }
-    public LiveData<String> getPrecio()    { return precio; }   // quedará vacío si tu modelo no lo trae
-    public LiveData<String> getEstado()    { return estado; }   // idem
+    public LiveData<String> getPrecio()    { return precio; }
+    public LiveData<String> getEstado()    { return estado; }
 
     public void cargar() {
         ApiClient.getInmobiliariaService().obtenerInmuebles()
@@ -49,14 +48,12 @@ public class InmuebleDetalleViewModel extends AndroidViewModel {
                                 direccion.postValue(nz(i.getDireccion()));
                                 ambientes.postValue("Ambientes: " + nz(i.getAmbientes()));
 
-                                // Si tu modelo algún día tiene precio/estado, completás acá.
-                                // Mientras tanto los dejamos en blanco (no rompe la UI).
                                 precio.postValue("");
                                 estado.postValue("");
                                 return;
                             }
                         }
-                        // Si no encontró: limpiar (UI nunca hace if)
+
                         titulo.postValue(""); direccion.postValue(""); ambientes.postValue("");
                         precio.postValue(""); estado.postValue("");
                     }

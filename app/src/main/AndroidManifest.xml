@@ -5,10 +5,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <!-- Para elegir imágenes desde galería -->
-    <!-- Android 13+ -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <!-- Pre-Android 13 -->
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
 
@@ -21,7 +19,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Inmobiliaria">
 
-        <!-- 🔑 API key de Google Maps DEBE estar DENTRO de <application> -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />

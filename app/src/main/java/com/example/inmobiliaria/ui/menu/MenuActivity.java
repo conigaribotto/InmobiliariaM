@@ -31,7 +31,6 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Guardia: si no hay token válido, volver a Login
         if (!ApiClient.isTokenValido(this)) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
@@ -64,7 +63,6 @@ public class MenuActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        // Header: datos del propietario
         vm = new ViewModelProvider(this).get(MenuViewModel.class);
         vm.cargarPropietario();
 
@@ -79,7 +77,7 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        // Logout
+
         navView.setNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_logout) {
                 ApiClient.borrarToken(this);

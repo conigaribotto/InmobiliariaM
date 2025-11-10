@@ -25,14 +25,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Usa ViewBinding para inflar el layout
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Configura la toolbar
+
         setSupportActionBar(binding.appBarMain.toolbar);
 
-        // Acción del FAB (puedes eliminar si no lo usás)
+
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,12 +43,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // DrawerLayout y NavigationView
+
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
 
-        // Configura los destinos principales del Drawer
-// MenuActivity.java
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_perfil,
                 R.id.nav_inmuebles
@@ -58,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Infla el menú superior
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }

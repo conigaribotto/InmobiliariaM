@@ -34,7 +34,7 @@ public class PagoViewModel extends AndroidViewModel {
         loading.postValue(true);
         empty.postValue(false);
 
-        // Sin header manual
+
         Call<List<Pagos>> call = ApiClient.getInmobiliariaService()
                 .obtenerPagosPorContrato(contratoId);
 
