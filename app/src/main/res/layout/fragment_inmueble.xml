@@ -12,81 +12,24 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:padding="12dp"
-            android:clipToPadding="false"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="60dp"
+            tools:listitem="@layout/item_inmueble" />
 
-            <EditText
-                android:id="@+id/etTitulo"
-                android:hint="@string/inmueble_titulo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <EditText
-                android:id="@+id/etDescripcion"
-                android:hint="@string/inmueble_desc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <EditText
-                android:id="@+id/etDireccion"
-                android:hint="@string/inmueble_dir"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <!-- Vista previa: oculta hasta elegir -->
-            <ImageView
-                android:id="@+id/ivFoto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:visibility="gone"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/inmueble_foto_desc"
-                tools:src="@android:drawable/ic_menu_camera" />
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:layout_marginTop="8dp">
-
-                <Button
-                    android:id="@+id/btnFoto"
-                    android:text="@string/inmueble_btn_foto"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-                <Button
-                    android:id="@+id/btnCrear"
-                    android:text="@string/inmueble_btn_crear"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"/>
-            </LinearLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:paddingTop="8dp"
-                android:clipToPadding="false"/>
-        </LinearLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <!-- ⭐ FAB AGREGADO AQUI ⭐ -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAdd"
+        android:id="@+id/fabAgregar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_input_add"
-        app:layout_anchorGravity="bottom|end"
         android:layout_margin="16dp"
-        app:layout_anchor="@id/swipeRefresh"/>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:layout_anchor="@id/swipeRefresh"
+        app:layout_anchorGravity="bottom|end" />
 
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 

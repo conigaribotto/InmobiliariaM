@@ -15,26 +15,45 @@ import com.example.inmobiliaria.R;
 
 public class InquilinoDetalleFragment extends Fragment {
 
-    @Nullable @Override
-    public View onCreateView(@NonNull LayoutInflater inf, @Nullable ViewGroup c, @Nullable Bundle b) {
-        View v = inf.inflate(R.layout.fragment_inquilino_detalle, c, false);
+    private InquilinoDetalleViewModel vm;
 
-        InquilinoDetalleViewModel vm =
-                new ViewModelProvider(this).get(InquilinoDetalleViewModel.class);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_inquilino_detalle, container, false);
+    }
 
-        TextView tvNom = v.findViewById(R.id.tvNombre);
-        TextView tvDni = v.findViewById(R.id.tvDni);
-        TextView tvTel = v.findViewById(R.id.tvTelefono);
-        TextView tvMail = v.findViewById(R.id.tvEmail);
-        TextView tvInm = v.findViewById(R.id.tvInmueble);
+    @Override
+    public void onViewCreated(@NonNull View v,
+                              @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(v, savedInstanceState);
 
-        vm.getNombreCompleto().observe(getViewLifecycleOwner(), tvNom::setText);
+        vm = new ViewModelProvider(this).get(InquilinoDetalleViewModel.class);
+
+        // argumento que viene desde InquilinosFragment
+        int contratoId = requireArguments().getInt("contratoId", -1);
+        vm.init(contratoId);
+
+        TextView tvInquilino = v.findViewById(R.id.tvInquilino);
+        TextView tvDni       = v.findViewById(R.id.tvDni);
+        TextView tvTel       = v.findViewById(R.id.tvTelefono);
+        TextView tvMail      = v.findViewById(R.id.tvEmail);
+        TextView tvInm       = v.findViewById(R.id.tvInmueble);
+        TextView tvFechas    = v.findViewById(R.id.tvFechas);
+        TextView tvMonto     = v.findViewById(R.id.tvMonto);
+
+        vm.getNombreCompleto().observe(getViewLifecycleOwner(), tvInquilino::setText);
         vm.getDni().observe(getViewLifecycleOwner(), tvDni::setText);
         vm.getTelefono().observe(getViewLifecycleOwner(), tvTel::setText);
         vm.getEmail().observe(getViewLifecycleOwner(), tvMail::setText);
         vm.getDireccionInmueble().observe(getViewLifecycleOwner(), tvInm::setText);
+        vm.getFechasContrato().observe(getViewLifecycleOwner(), tvFechas::setText);
+        vm.getMontoContrato().observe(getViewLifecycleOwner(), tvMonto::setText);
 
         vm.cargar();
-        return v;
     }
 }
+
+

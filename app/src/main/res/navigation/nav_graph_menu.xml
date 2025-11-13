@@ -5,12 +5,14 @@
     android:id="@+id/nav_graph_menu"
     app:startDestination="@id/nav_inicio">
 
+    <!-- INICIO -->
     <fragment
         android:id="@+id/nav_inicio"
         android:name="com.example.inmobiliaria.ui.inicio.InicioFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_inicio" />
 
+    <!-- PERFIL -->
     <fragment
         android:id="@+id/nav_perfil"
         android:name="com.example.inmobiliaria.ui.perfil.PerfilFragment"
@@ -33,9 +35,16 @@
         android:name="com.example.inmobiliaria.ui.inmuebles.InmuebleFragment"
         android:label="@string/menu_inmuebles"
         tools:layout="@layout/fragment_inmueble">
+
+        <!-- Detalle desde la lista -->
         <action
             android:id="@+id/action_nav_inmuebles_to_nav_inmueble_detalle"
             app:destination="@id/nav_inmueble_detalle" />
+
+        <!-- Agregar inmueble (usada por el FAB del Activity) -->
+        <action
+            android:id="@+id/action_nav_inmuebles_to_nav_agregar_inmueble"
+            app:destination="@id/nav_agregar_inmueble" />
     </fragment>
 
     <!-- DETALLE INMUEBLE -->
@@ -49,7 +58,14 @@
             app:argType="integer" />
     </fragment>
 
-    <!-- INQUILINOS (lista desde contratos) -->
+    <!-- AGREGAR INMUEBLE -->
+    <fragment
+        android:id="@+id/nav_agregar_inmueble"
+        android:name="com.example.inmobiliaria.ui.inmuebles.AgregarInmuebleFragment"
+        android:label="Agregar Inmueble"
+        tools:layout="@layout/fragment_agregar_inmueble" />
+
+    <!-- INQUILINOS (lista) -->
     <fragment
         android:id="@+id/nav_inquilinos"
         android:name="com.example.inmobiliaria.ui.inquilinos.InquilinosFragment"
@@ -60,7 +76,7 @@
             app:destination="@id/nav_inquilino_detalle" />
     </fragment>
 
-    <!-- DETALLE INQUILINO (por contrato) -->
+    <!-- DETALLE INQUILINO -->
     <fragment
         android:id="@+id/nav_inquilino_detalle"
         android:name="com.example.inmobiliaria.ui.inquilinos.InquilinoDetalleFragment"
@@ -93,7 +109,7 @@
             app:argType="integer" />
     </fragment>
 
-    <!-- (opcional) Pagos si lo necesitás -->
+    <!-- PAGOS (opcional) -->
     <fragment
         android:id="@+id/nav_pagos"
         android:name="com.example.inmobiliaria.ui.pagos.PagoFragment"
@@ -104,9 +120,11 @@
             app:argType="integer" />
     </fragment>
 
+    <!-- LOGOUT (dummy) -->
     <fragment
         android:id="@+id/nav_logout"
         android:name="com.example.inmobiliaria.ui.logout.LogoutFragment"
         android:label="@string/menu_logout"
         tools:layout="@layout/fragment_logout" />
+
 </navigation>

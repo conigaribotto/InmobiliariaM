@@ -5,23 +5,39 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:padding="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="16dp"
+        android:paddingTop="60dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- Título pequeño arriba -->
         <TextView
-            android:id="@+id/tvDireccion"
-            android:textStyle="bold"
-            android:textSize="18sp"
+            android:id="@+id/tvTituloInicio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Dirección de la Inmobiliaria"/>
+            android:text="Nuestra ubicación"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
 
+        <!-- Dirección debajo del título -->
+        <TextView
+            android:id="@+id/tvDireccion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Universidad de La Punta, San Luis, Argentina"
+            android:textSize="14sp"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Mapa ocupa todo el resto de la pantalla -->
         <com.google.android.gms.maps.MapView
             android:id="@+id/mapView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="8dp" />
+
     </LinearLayout>
 </FrameLayout>

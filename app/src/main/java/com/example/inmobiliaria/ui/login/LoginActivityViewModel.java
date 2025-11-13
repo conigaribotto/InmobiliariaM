@@ -58,4 +58,3 @@ public class LoginActivityViewModel extends AndroidViewModel {
     }
 }
 
-

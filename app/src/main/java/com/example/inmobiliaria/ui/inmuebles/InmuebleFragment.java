@@ -1,16 +1,10 @@
 package com.example.inmobiliaria.ui.inmuebles;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -21,26 +15,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.inmobiliaria.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class InmuebleFragment extends Fragment {
 
     private InmueblesViewModel vm;
-    private Uri selectedImageUri;
-    private ImageView ivFoto;
-
-    private final ActivityResultLauncher<String> pickImageLauncher =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
-
-                if (uri != null) {
-                    selectedImageUri = uri;
-                    ivFoto.setVisibility(View.VISIBLE);
-                    ivFoto.setImageURI(uri);
-                }
-            });
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inf, @Nullable ViewGroup c, @Nullable Bundle b) {
+    public View onCreateView(@NonNull LayoutInflater inf,
+                             @Nullable ViewGroup c,
+                             @Nullable Bundle b) {
+
         View v = inf.inflate(R.layout.fragment_inmueble, c, false);
 
         vm = new ViewModelProvider(this).get(InmueblesViewModel.class);
@@ -58,31 +44,16 @@ public class InmuebleFragment extends Fragment {
         SwipeRefreshLayout swipe = v.findViewById(R.id.swipeRefresh);
         swipe.setOnRefreshListener(vm::cargar);
 
-        EditText etTit  = v.findViewById(R.id.etTitulo);
-        EditText etDesc = v.findViewById(R.id.etDescripcion);
-        EditText etDir  = v.findViewById(R.id.etDireccion);
-        Button btnFoto  = v.findViewById(R.id.btnFoto);
-        Button btnCrear = v.findViewById(R.id.btnCrear);
-        ivFoto = v.findViewById(R.id.ivFoto);
-
-
-        ivFoto.setVisibility(View.GONE);
-
-        btnFoto.setOnClickListener(view -> pickImageLauncher.launch("image/*"));
-
-        btnCrear.setOnClickListener(view -> {
-            String titulo = etTit.getText().toString();
-            String desc   = etDesc.getText().toString();
-            String dir    = etDir.getText().toString();
-            vm.crear(titulo, desc, dir, selectedImageUri, requireContext());
-        });
-
         vm.getInmuebles().observe(getViewLifecycleOwner(), adapter::submit);
         vm.getLoading().observe(getViewLifecycleOwner(), swipe::setRefreshing);
+
+        FloatingActionButton fab = v.findViewById(R.id.fabAgregar);
+        fab.setOnClickListener(view ->
+                Navigation.findNavController(v)
+                        .navigate(R.id.action_nav_inmuebles_to_nav_agregar_inmueble)
+        );
 
         vm.cargar();
         return v;
     }
 }
-
-

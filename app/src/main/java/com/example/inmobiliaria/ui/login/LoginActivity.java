@@ -33,9 +33,11 @@ public class LoginActivity extends AppCompatActivity implements SensorEventListe
 
         viewModel = new ViewModelProvider(this).get(LoginActivityViewModel.class);
 
+        // Mensajes de feedback
         viewModel.getMensaje().observe(this,
                 msg -> Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show());
 
+        // Navegar al menú solo cuando el login sea exitoso
         viewModel.getLoginExitoso().observe(this, ok -> {
             if (ok) {
                 startActivity(new Intent(LoginActivity.this, MenuActivity.class));
@@ -43,20 +45,21 @@ public class LoginActivity extends AppCompatActivity implements SensorEventListe
             }
         });
 
+        // Botón de login
         binding.btnLogin.setOnClickListener((View v) -> {
             String usuario = binding.etUsuario.getText().toString();
             String clave = binding.etClave.getText().toString();
             viewModel.login(usuario, clave);
         });
 
+        // 🚫 IMPORTANTE: ya NO llamamos a verificarSesion()
+        // viewModel.verificarSesion();
+
         // SensorManager para detectar agitación
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         if (sensorManager != null) {
             accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         }
-
-        // Si ya hay token válido, ir al Menú
-        viewModel.verificarSesion();
     }
 
     @Override
@@ -100,5 +103,5 @@ public class LoginActivity extends AppCompatActivity implements SensorEventListe
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+    public void onAccuracyChanged(Sensor sensor, int accuracy) { }
 }

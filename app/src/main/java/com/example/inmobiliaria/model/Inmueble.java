@@ -1,20 +1,25 @@
 package com.example.inmobiliaria.model;
 
-public class Inmueble {
+import java.io.Serializable;
+
+public class Inmueble implements Serializable {
+
     private int idInmueble;
     private String direccion;
     private String uso;
     private String tipo;
     private int ambientes;
-    private double superficie;
-    private Double latitud;
-    private Double longitud;
-    private Double valor;
+    private int superficie;
+    private double latitud;
+    private double longitud;
+    private double valor;
     private String imagen;
     private boolean disponible;
     private int idPropietario;
     private Propietario duenio;
-    private Boolean tieneContratoVigente;
+    private boolean tieneContratoVigente;
+
+    public Inmueble() { }
 
     public int getIdInmueble() { return idInmueble; }
     public void setIdInmueble(int idInmueble) { this.idInmueble = idInmueble; }
@@ -31,17 +36,17 @@ public class Inmueble {
     public int getAmbientes() { return ambientes; }
     public void setAmbientes(int ambientes) { this.ambientes = ambientes; }
 
-    public double getSuperficie() { return superficie; }
-    public void setSuperficie(double superficie) { this.superficie = superficie; }
+    public int getSuperficie() { return superficie; }
+    public void setSuperficie(int superficie) { this.superficie = superficie; }
 
-    public Double getLatitud() { return latitud; }
-    public void setLatitud(Double latitud) { this.latitud = latitud; }
+    public double getLatitud() { return latitud; }
+    public void setLatitud(double latitud) { this.latitud = latitud; }
 
-    public Double getLongitud() { return longitud; }
-    public void setLongitud(Double longitud) { this.longitud = longitud; }
+    public double getLongitud() { return longitud; }
+    public void setLongitud(double longitud) { this.longitud = longitud; }
 
-    public Double getValor() { return valor; }
-    public void setValor(Double valor) { this.valor = valor; }
+    public double getValor() { return valor; }
+    public void setValor(double valor) { this.valor = valor; }
 
     public String getImagen() { return imagen; }
     public void setImagen(String imagen) { this.imagen = imagen; }
@@ -55,8 +60,10 @@ public class Inmueble {
     public Propietario getDuenio() { return duenio; }
     public void setDuenio(Propietario duenio) { this.duenio = duenio; }
 
-    public Boolean getTieneContratoVigente() { return tieneContratoVigente; }
-    public void setTieneContratoVigente(Boolean tieneContratoVigente) { this.tieneContratoVigente = tieneContratoVigente; }
+    public boolean isTieneContratoVigente() { return tieneContratoVigente; }
+    public void setTieneContratoVigente(boolean tieneContratoVigente) { this.tieneContratoVigente = tieneContratoVigente; }
+
+    // Helpers
 
     public String getTitulo() {
         return tipo == null ? "" : tipo;
@@ -72,9 +79,7 @@ public class Inmueble {
 
     public String getFotoUrl() {
         if (imagen == null) return "";
-        // normaliza backslashes -> slashes
-        String clean = imagen.replace("\\", "/");
-        return clean;
+        return imagen.replace("\\", "/");
     }
 
     public String getDireccionSafe() {

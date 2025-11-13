@@ -16,6 +16,8 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -107,13 +109,12 @@ public class ApiClient {
         @GET("api/inmuebles")
         Call<List<Inmueble>> obtenerInmuebles();
 
+
         @Multipart
-        @POST("api/inmuebles")
-        Call<Inmueble> crearInmueble(
-                @Part("titulo") okhttp3.RequestBody titulo,
-                @Part("descripcion") okhttp3.RequestBody descripcion,
-                @Part("direccion") okhttp3.RequestBody direccion,
-                @Part okhttp3.MultipartBody.Part foto
+        @POST("api/inmuebles/cargar")
+        Call<Inmueble> cargarInmueble(
+                @Part MultipartBody.Part imagen,
+                @Part("inmueble") RequestBody inmueble
         );
 
         @GET("api/contratos")
@@ -125,6 +126,8 @@ public class ApiClient {
         @GET("api/pagos/contrato/{id}")
         Call<List<Pagos>> obtenerPagosPorContrato(@Path("id") int contratoId);
     }
+
+    // ==== token & owner helpers ====
 
     public static void guardarToken(Context ctx, String token) {
         if (token == null) return;

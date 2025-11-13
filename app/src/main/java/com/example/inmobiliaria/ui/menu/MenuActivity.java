@@ -19,7 +19,6 @@ import com.example.inmobiliaria.databinding.ActivityMenuBinding;
 import com.example.inmobiliaria.request.ApiClient;
 import com.example.inmobiliaria.ui.login.LoginActivity;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -31,6 +30,7 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Si no hay token válido → volver a login
         if (!ApiClient.isTokenValido(this)) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
@@ -41,15 +41,15 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMenu.toolbar);
-        binding.appBarMenu.fab.setOnClickListener(view ->
-                Snackbar.make(view, "Acción de ejemplo", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .show()
-        );
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navView = binding.navView;
 
+        // NavController principal
+        NavController navController =
+                Navigation.findNavController(this, R.id.nav_host_fragment_content_menu);
+
+        // Destinos de primer nivel del drawer
         appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_inicio,
                 R.id.nav_perfil,
@@ -58,11 +58,10 @@ public class MenuActivity extends AppCompatActivity {
                 R.id.nav_contratos
         ).setOpenableLayout(drawer).build();
 
-        NavController navController =
-                Navigation.findNavController(this, R.id.nav_host_fragment_content_menu);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+        // ViewModel de propietario (header del drawer)
         vm = new ViewModelProvider(this).get(MenuViewModel.class);
         vm.cargarPropietario();
 
@@ -77,7 +76,25 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
+        // ******** FAB: solo visible en INMUEBLES y navega a AGREGAR INMUEBLE ********
+        binding.appBarMenu.fab.setImageResource(android.R.drawable.ic_input_add);
 
+        navController.addOnDestinationChangedListener((controller, dest, args) -> {
+            if (dest.getId() == R.id.nav_inmuebles) {
+                binding.appBarMenu.fab.show();
+            } else {
+                binding.appBarMenu.fab.hide();
+            }
+        });
+
+        binding.appBarMenu.fab.setOnClickListener(view -> {
+            if (navController.getCurrentDestination() != null &&
+                    navController.getCurrentDestination().getId() == R.id.nav_inmuebles) {
+                navController.navigate(R.id.action_nav_inmuebles_to_nav_agregar_inmueble);
+            }
+        });
+
+        // Manejo del item Logout en el drawer
         navView.setNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_logout) {
                 ApiClient.borrarToken(this);
@@ -100,4 +117,3 @@ public class MenuActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 }
-

@@ -135,4 +135,3 @@ public class PerfilViewModel extends AndroidViewModel {
 
     private static String safe(String s) { return s == null ? "" : s; }
 }
-

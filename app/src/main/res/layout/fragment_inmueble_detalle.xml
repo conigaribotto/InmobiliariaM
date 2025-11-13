@@ -1,46 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="16dp"
+    android:paddingTop="80dp">
 
     <LinearLayout
         android:orientation="vertical"
-        android:padding="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!-- FOTO DEL INMUEBLE -->
+        <ImageView
+            android:id="@+id/ivFotoInmueble"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:background="#333"
+            tools:src="@android:drawable/ic_menu_gallery" />
+
+        <!-- Título / Tipo -->
         <TextView
             android:id="@+id/tvTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_marginTop="12dp"
+            tools:text="Casa" />
 
+        <!-- Dirección -->
         <TextView
             android:id="@+id/tvDireccion"
-            android:layout_marginTop="8dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            tools:text="Mitre 123" />
 
+        <!-- Uso -->
+        <TextView
+            android:id="@+id/tvUso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            tools:text="Uso: Residencial" />
+
+        <!-- Tipo -->
+        <TextView
+            android:id="@+id/tvTipo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Tipo: Casa" />
+
+        <!-- Ambientes -->
         <TextView
             android:id="@+id/tvAmbientes"
-            android:layout_marginTop="12dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            tools:text="Ambientes: 3" />
 
+        <!-- Superficie -->
         <TextView
-            android:id="@+id/tvPrecio"
-            android:layout_marginTop="8dp"
+            android:id="@+id/tvSuperficie"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            tools:text="Superficie: 120 m²" />
 
+        <!-- Valor -->
+        <TextView
+            android:id="@+id/tvValor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            tools:text="Valor: $ 480000.0" />
+
+        <!-- Latitud -->
+        <TextView
+            android:id="@+id/tvLatitud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            tools:text="Latitud: -33.12345" />
+
+        <!-- Longitud -->
+        <TextView
+            android:id="@+id/tvLongitud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Longitud: -66.45678" />
+
+        <!-- Estado / Disponible -->
         <TextView
             android:id="@+id/tvEstado"
-            android:layout_marginTop="8dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textStyle="bold"
+            tools:text="Estado: Disponible" />
+
     </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+</ScrollView>
